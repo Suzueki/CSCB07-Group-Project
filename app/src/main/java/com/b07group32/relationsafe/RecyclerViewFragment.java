@@ -1,4 +1,4 @@
-package com.example.b07demosummer2024;
+package com.b07group32.relationsafe;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

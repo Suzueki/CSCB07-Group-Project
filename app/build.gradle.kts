@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.b07demosummer2024"
+    namespace = "com.b07group32.relationsafe"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.b07demosummer2024"
+        applicationId = "com.b07group32.relationsafe"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -30,7 +30,7 @@ android {
 }
 
 dependencies {
-
+    implementation(platform("com.google.firebase:firebase-bom:33.16.0"))
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
