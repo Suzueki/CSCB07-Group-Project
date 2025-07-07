@@ -5,6 +5,11 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import android.content.Intent;
+import android.net.Uri;
+import android.view.View;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -27,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             loadFragment(new HomeFragment());
         }
+
+        setupEmergencyExitFAB();
     }
 
     private void loadFragment(Fragment fragment) {
@@ -43,5 +50,23 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    private void setupEmergencyExitFAB() {
+        FloatingActionButton fab = findViewById(R.id.fab_exit);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emergencyExit();
+            }
+        });
+    }
+
+    private void emergencyExit() {
+        // TODO: Configurable URL
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+        startActivity(intent);
+        finishAffinity();
     }
 }
