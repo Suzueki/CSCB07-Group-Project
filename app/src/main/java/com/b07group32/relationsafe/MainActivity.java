@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -26,11 +27,15 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseDatabase.getInstance("https://relationsafe-20cde-default-rtdb.firebaseio.com/");
         DatabaseReference myRef = db.getReference("testDemo");
 
-//        myRef.setValue("B07 Demo!");
-        myRef.child("movies").setValue("B07 Demo!");
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signOut();
 
         if (savedInstanceState == null) {
-            loadFragment(new HomeFragment());
+            if (auth.getCurrentUser() == null) {
+                loadFragment(new HomeFragment());
+            } else {
+                loadFragment(new EmergencyInfoStorageFragment());
+            }
         }
 
         setupEmergencyExitFAB();
@@ -65,6 +70,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void emergencyExit() {
         // TODO: Configurable URL
+        try{
+            FirebaseAuth.getInstance().signOut();}
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
         startActivity(intent);
         finishAffinity();
