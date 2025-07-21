@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
@@ -418,5 +419,12 @@ public class LoginFragment extends Fragment {
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
+        if(fragment instanceof HomeFragment){
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        } else {
+            bottomNavigationView.setVisibility(View.GONE);
+        }
     }
 }
