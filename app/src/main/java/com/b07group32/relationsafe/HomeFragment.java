@@ -35,16 +35,7 @@ public class HomeFragment extends Fragment {
         buttonEmergencyInfoStorage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Check authentication before navigating
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-                if (auth.getCurrentUser() != null) {
-                    // User is authenticated, go to emergency info storage
-                    loadFragment(new EmergencyInfoStorageFragment());
-                } else {
-                    // User is not authenticated, go to login
-                    Toast.makeText(getContext(), "Please log in to access emergency info storage", Toast.LENGTH_LONG).show();
-                    loadFragment(new LoginFragment());
-                }
+                loadFragment(new EmergencyInfoStorageFragment());
             }
         });
 
