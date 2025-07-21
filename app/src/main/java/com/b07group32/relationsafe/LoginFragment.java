@@ -175,7 +175,7 @@ public class LoginFragment extends Fragment {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getContext(), "PIN login successful", Toast.LENGTH_SHORT).show();
-                                loadFragment(new EmergencyInfoStorageFragment());
+                                loadFragment(new HomeFragment());
                             }
                             else {
                                 Toast.makeText(getContext(), "Authentication failed. Please use email login.",
@@ -224,7 +224,7 @@ public class LoginFragment extends Fragment {
         try {
             if(isPinSet()) {
                 // if PIN already exists, go to main app
-                loadFragment(new EmergencyInfoStorageFragment());
+                loadFragment(new HomeFragment());
             }
             else {
                 // if PIN not set, prompts user to create one
@@ -404,7 +404,7 @@ public class LoginFragment extends Fragment {
                     .apply();
 
             Toast.makeText(getContext(), "PIN set successfully", Toast.LENGTH_SHORT).show();
-            loadFragment(new EmergencyInfoStorageFragment());
+            loadFragment(new HomeFragment());
 
         }
         catch (GeneralSecurityException | IOException e) {

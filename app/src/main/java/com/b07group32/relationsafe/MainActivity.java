@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -30,12 +31,10 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signOut();
 
-        if (savedInstanceState == null) {
-            if (auth.getCurrentUser() == null) {
-                loadFragment(new HomeFragment());
-            } else {
-                loadFragment(new EmergencyInfoStorageFragment());
-            }
+        if (auth.getCurrentUser() != null) {
+            loadFragment(new HomeFragment());
+        } else {
+            loadFragment(new LoginFragment());
         }
 
         setupEmergencyExitFAB();
