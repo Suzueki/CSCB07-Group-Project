@@ -58,4 +58,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <Button
+        android:id="@+id/buttonQuestionaire"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/questionaire"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSpinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonScroller" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
