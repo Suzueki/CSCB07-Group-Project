@@ -11,7 +11,8 @@
     <string name="manage_items">Manage Items</string>
     <string name="fab_exit_name">Go to Google</string>
     <string name="questionaire">Questionaire</string>
-    
+    <string name="freetext_hint">Enter your response</string>
+
     <string-array name="categories_array">
         <item>Books</item>
         <item>Movies</item>

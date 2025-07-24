@@ -7,43 +7,153 @@
     android:padding="16dp"
     android:layout_marginTop="20dp">
     <TextView
+        android:id="@+id/questionNum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        tools:text="Question #">
-    </TextView>
-    <androidx.cardview.widget.CardView
+        tools:text="Question #"/>
+    <TextView
+        android:id="@+id/questionContent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginVertical="8dp"
-        android:elevation="4dp">
-        <LinearLayout
+        android:layout_height="120dp"
+        tools:text="Placeholder Question"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="@color/blue"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_marginVertical="8dp"/>
+
+    <!-- multiple choice option -->
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:id="@+id/multipleChoice">
+        <RadioButton
+            android:id="@+id/choiceA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                tools:text="Placeholder Question"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:padding="8dp"
-                android:background="@drawable/rounded_corner"
-                android:backgroundTint="@color/blue"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:layout_marginVertical="8dp">
-            </TextView>
-            <!-- answers -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+            android:background="@drawable/rounded_corner"
+            android:layout_marginVertical="8dp"
+            android:padding="16dp"
+            android:backgroundTint="@color/gray"
+            tools:text="Choice A"
+            tools:textAllCaps="false"
+            android:visibility="visible"
+            android:button="@android:color/transparent"/>
+        <RadioButton
+            android:id="@+id/choiceB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner"
+            android:layout_marginVertical="8dp"
+            android:padding="16dp"
+            android:backgroundTint="@color/gray"
+            tools:text="Choice B"
+            tools:textAllCaps="false"
+            android:visibility="visible"
+            android:button="@android:color/transparent"/>
+        <RadioButton
+            android:id="@+id/choiceC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner"
+            android:layout_marginVertical="8dp"
+            android:padding="16dp"
+            android:backgroundTint="@color/gray"
+            tools:text="Choice C"
+            tools:textAllCaps="false"
+            android:visibility="visible"
+            android:button="@android:color/transparent"/>
+        <RadioButton
+            android:id="@+id/choiceD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner"
+            android:layout_marginVertical="8dp"
+            android:padding="16dp"
+            android:backgroundTint="@color/gray"
+            tools:text="Choice D"
+            tools:textAllCaps="false"
+            android:visibility="visible"
+            android:button="@android:color/transparent"/>
+        <!-- other will also make edittext field visible for user input -->
+        <RadioButton
+            android:id="@+id/choiceOther"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner"
+            android:layout_marginVertical="8dp"
+            android:padding="16dp"
+            android:backgroundTint="@color/gray"
+            tools:text="Other"
+            tools:textAllCaps="false"
+            android:visibility="visible"
+            android:button="@android:color/transparent"/>
+    </RadioGroup>
+    <!-- short response -->
+    <EditText
+        android:id="@+id/shortResponse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
+        android:hint="@string/freetext_hint"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="@color/gray"/>
 
+    <!-- For the cities question? Content of spinner has to be added in the java file -->
+    <Spinner
+        android:id="@+id/spinnerDropdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:visibility="visible"/>
 
-
+    <!-- back, next, and submit buttons -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp">
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            tools:text="Back"
+            android:padding="16dp"
+            android:background="@drawable/rounded_corner"
+            android:backgroundTint="@color/blue"
+            android:textColor="@color/white"
+            tools:textAllCaps="false"
+            android:visibility="visible"/>
+        <Button
+            android:id="@+id/buttonNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Next"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/rounded_corner"
+            android:backgroundTint="@color/blue"
+            android:textColor="@color/white"
+            android:padding="16dp"
+            tools:textAllCaps="false"
+            android:visibility="visible"/>
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Submit"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/rounded_corner"
+            android:backgroundTint="@color/blue"
+            android:textColor="@color/white"
+            android:padding="16dp"
+            tools:textAllCaps="false"
+            android:visibility="gone"/>
+    </RelativeLayout>
 </LinearLayout>

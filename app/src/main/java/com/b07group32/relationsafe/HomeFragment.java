@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment {
 
         buttonQuestionaire.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { loadFragment(new QuestionaireFragment());}
+            public void onClick(View v) { loadFragment(new QuestionnaireFragment());}
         });
 
         return view;
