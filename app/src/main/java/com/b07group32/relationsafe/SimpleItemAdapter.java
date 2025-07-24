@@ -9,69 +9,102 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-public class SimpleItemAdapter extends RecyclerView.Adapter<SimpleItemAdapter.ItemViewHolder> {
+public class SimpleItemAdapter extends RecyclerView.Adapter<SimpleItemAdapter.ItemViewHolder>
+{
 
     private List<String> items;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private OnItemSelectedListener listener;
 
-    public interface OnItemSelectedListener {
+    public interface OnItemSelectedListener
+    {
         void onItemSelected(int position);
     }
 
-    public SimpleItemAdapter(List<String> items, OnItemSelectedListener listener) {
+    public SimpleItemAdapter(List<String> items, OnItemSelectedListener listener)
+    {
         this.items = items;
         this.listener = listener;
     }
 
     @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(android.R.layout.simple_list_item_1, parent, false);
         return new ItemViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position)
+    {
         holder.textView.setText(items.get(position));
 
         // Highlight selected
-        if (position == selectedPosition) {
+        if (position == selectedPosition)
+        {
             holder.itemView.setBackgroundColor(Color.LTGRAY);
-        } else {
+        }
+        else
+        {
             holder.itemView.setBackgroundColor(Color.TRANSPARENT);
         }
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(v ->
+        {
             int previousSelected = selectedPosition;
             selectedPosition = holder.getAdapterPosition();
             notifyItemChanged(previousSelected);
             notifyItemChanged(selectedPosition);
-            if (listener != null) listener.onItemSelected(selectedPosition);
+            if (listener != null)
+            {
+                listener.onItemSelected(selectedPosition);
+            }
+
         });
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         return items.size();
     }
 
-    public int getSelectedPosition() {
+    public int getSelectedPosition()
+    {
         return selectedPosition;
     }
 
-    public void clearSelection() {
+    public void setSelectedPosition(int position)
+    {
+        int previousSelected = selectedPosition;
+        selectedPosition = position;
+        if (previousSelected != RecyclerView.NO_POSITION)
+        {
+            notifyItemChanged(previousSelected);
+        }
+        if (selectedPosition != RecyclerView.NO_POSITION)
+        {
+            notifyItemChanged(selectedPosition);
+        }
+    }
+
+    public void clearSelection()
+    {
         int prev = selectedPosition;
         selectedPosition = RecyclerView.NO_POSITION;
-        if (prev != RecyclerView.NO_POSITION) {
+        if (prev != RecyclerView.NO_POSITION)
+        {
             notifyItemChanged(prev);
         }
     }
 
-    static class ItemViewHolder extends RecyclerView.ViewHolder {
+    static class ItemViewHolder extends RecyclerView.ViewHolder
+    {
         TextView textView;
-        ItemViewHolder(@NonNull View itemView) {
+        ItemViewHolder(@NonNull View itemView)
+        {
             super(itemView);
             textView = itemView.findViewById(android.R.id.text1);
         }
