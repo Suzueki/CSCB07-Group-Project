@@ -13,4 +13,11 @@ public class Question {
         this.answers = answers;
     }
 
+    public String getQuestionText() {
+        return question;
+    }
+
+    public ArrayList<Answer> getAnswers() {
+        return answers;
+    }
 }
