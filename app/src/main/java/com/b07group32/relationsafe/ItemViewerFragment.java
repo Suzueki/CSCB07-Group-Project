@@ -5,6 +5,8 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,7 +18,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +28,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +37,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +58,7 @@ public class ItemViewerFragment extends Fragment {
     private DatabaseReference databaseRef;
     private DatabaseReference itemRef;
     private DocumentUploadManager uploadManager;
+    private StorageReference storageRef;
 
     private String itemKey;
     private String itemTitle;
@@ -63,12 +76,18 @@ public class ItemViewerFragment extends Fragment {
     private LinearLayout fieldsContainer;
     private LinearLayout fileSection;
     private TextView fileInfoTextView;
+
+    // Document viewers
+    private ImageView imageView;
     private WebView documentWebView;
+    private ProgressBar loadingProgressBar;
+
     private Button downloadButton;
     private Button selectFileButton;
     private Button updateButton;
     private Button backButton;
     private Button copyLinkButton;
+    private Button openExternalButton;
     private TextView downloadLinkTextView;
 
     // Dynamic field storage
@@ -104,6 +123,7 @@ public class ItemViewerFragment extends Fragment {
                     .child("emergency_info");
 
             itemRef = databaseRef.child(category).child(itemKey);
+            storageRef = FirebaseStorage.getInstance().getReference();
 
             // Initialize DocumentUploadManager
             uploadManager = new DocumentUploadManager(this, currentUser, databaseRef);
@@ -113,7 +133,7 @@ public class ItemViewerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.item_viewer_fragment, container, false);
+        View view = inflater.inflate(R.layout.item_viewer_fragment_native, container, false);
 
         if (currentUser == null) {
             Toast.makeText(getContext(), "Authentication error. Returning to previous screen.", Toast.LENGTH_LONG).show();
@@ -134,19 +154,26 @@ public class ItemViewerFragment extends Fragment {
         fieldsContainer = view.findViewById(R.id.fieldsContainer);
         fileSection = view.findViewById(R.id.fileSection);
         fileInfoTextView = view.findViewById(R.id.fileNameTextView);
+
+        // Document viewers
+        imageView = view.findViewById(R.id.imageView);
         documentWebView = view.findViewById(R.id.documentWebView);
+        loadingProgressBar = view.findViewById(R.id.loadingProgressBar);
+
         downloadButton = view.findViewById(R.id.downloadButton);
         selectFileButton = view.findViewById(R.id.selectFileButton);
         updateButton = view.findViewById(R.id.updateButton);
         backButton = view.findViewById(R.id.backButton);
-
-        // Get the copy button and status text from XML layout
         copyLinkButton = view.findViewById(R.id.copyLinkButton);
+        openExternalButton = view.findViewById(R.id.openExternalButton);
         downloadLinkTextView = view.findViewById(R.id.downloadStatusTextView);
 
-        // Set up copy button click listener
         if (copyLinkButton != null) {
             copyLinkButton.setOnClickListener(v -> copyDownloadLinkToClipboard());
+        }
+
+        if (openExternalButton != null) {
+            openExternalButton.setOnClickListener(v -> openFileExternally());
         }
 
         titleTextView.setText(category + " Viewer");
@@ -177,12 +204,288 @@ public class ItemViewerFragment extends Fragment {
         });
     }
 
-    private void showWebViewError(String title, String message) {
-        String errorHtml = "<html><body style='padding:20px;text-align:center;background-color:#fff3cd;border:1px solid #ffeaa7;border-radius:8px;margin:10px;font-family:Arial,sans-serif;'>" +
-                "<h3 style='color:#856404;margin-top:0;'>" + title + "</h3>" +
-                "<p style='color:#856404;'>" + message + "</p>" +
+    private void loadDocumentFileData(DataSnapshot dataSnapshot) {
+        currentBlobReference = dataSnapshot.child("blobReference").getValue(String.class);
+        currentFileName = dataSnapshot.child("originalFileName").getValue(String.class);
+        currentFileSize = dataSnapshot.child("fileSize").getValue(String.class);
+        currentMimeType = dataSnapshot.child("mimeType").getValue(String.class);
+
+        if (currentBlobReference != null && currentFileName != null) {
+            // Display file info
+            String fileSizeText = formatFileSize(currentFileSize);
+            fileInfoTextView.setText("Current file: " + currentFileName + " (" + fileSizeText + ")");
+
+            // Load document using Firebase Storage directly
+            loadDocumentFromStorage();
+        } else {
+            fileInfoTextView.setText("No file uploaded");
+            downloadButton.setEnabled(false);
+            copyLinkButton.setVisibility(View.GONE);
+            openExternalButton.setVisibility(View.GONE);
+            downloadLinkTextView.setVisibility(View.GONE);
+            showNoDocumentMessage();
+        }
+    }
+
+    private void loadDocumentFromStorage() {
+        if (currentBlobReference == null) return;
+
+        showLoadingState();
+
+        StorageReference fileRef = storageRef.child(currentBlobReference);
+
+        // Get download URL for sharing/downloading
+        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                currentDownloadUrl = uri;
+                downloadButton.setEnabled(true);
+                copyLinkButton.setVisibility(View.VISIBLE);
+                openExternalButton.setVisibility(View.VISIBLE);
+                downloadLinkTextView.setVisibility(View.VISIBLE);
+                downloadLinkTextView.setText("✅ File ready for download and sharing");
+                downloadLinkTextView.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "Failed to get download URL", e);
+                downloadButton.setEnabled(false);
+                copyLinkButton.setVisibility(View.GONE);
+                openExternalButton.setVisibility(View.GONE);
+                downloadLinkTextView.setVisibility(View.VISIBLE);
+                downloadLinkTextView.setText("❌ Error loading download options");
+                downloadLinkTextView.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+            }
+        });
+
+        // Determine file type and load accordingly
+        String fileType = determineFileType(currentFileName, currentMimeType);
+
+        switch (fileType) {
+            case "pdf":
+                loadPdfAsWebView(fileRef);
+                break;
+            case "image":
+                loadImageFromStorage(fileRef);
+                break;
+            default:
+                hideLoadingState();
+                showUnsupportedFileMessage(currentFileName, fileType);
+                break;
+        }
+    }
+
+    private void loadPdfAsWebView(StorageReference fileRef) {
+        // For PDFs, we'll create a simple viewer that shows file info and provides options
+        hideLoadingState();
+        showWebViewer();
+
+        String pdfViewerHtml = "<!DOCTYPE html>" +
+                "<html><head>" +
+                "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
+                "<style>" +
+                "body { padding:20px; text-align:center; background-color:#e8f5e8; border:2px solid #4caf50; border-radius:12px; margin:15px; font-family:Arial,sans-serif; }" +
+                ".icon { font-size:64px; margin-bottom:20px; }" +
+                "h3 { color:#2e7d32; margin:15px 0; }" +
+                "p { color:#388e3c; margin:10px 0; line-height:1.5; }" +
+                ".filename { font-weight:bold; color:#1b5e20; background:#c8e6c9; padding:8px 12px; border-radius:6px; margin:10px 0; display:inline-block; }" +
+                ".action-text { color:#4caf50; font-size:14px; margin-top:15px; }" +
+                "</style>" +
+                "</head><body>" +
+                "<div class='icon'>📄</div>" +
+                "<h3>PDF Document Ready</h3>" +
+                "<div class='filename'>" + currentFileName + "</div>" +
+                "<p>This PDF document is ready to view.</p>" +
+                "<p><strong>Use the buttons below to:</strong></p>" +
+                "<p>• Download to your device</p>" +
+                "<p>• Open in external PDF viewer</p>" +
+                "<p>• Copy shareable link</p>" +
+                "<div class='action-text'>PDF files are best viewed in dedicated PDF apps for full functionality.</div>" +
+                "</body></html>";
+
+        documentWebView.loadData(pdfViewerHtml, "text/html", "UTF-8");
+    }
+
+    private void loadImageFromStorage(StorageReference fileRef) {
+        showImageViewer();
+
+        // Download image to cache and display
+        try {
+            File localFile = File.createTempFile("temp_image", ".jpg", getContext().getCacheDir());
+
+            fileRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<com.google.firebase.storage.FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(com.google.firebase.storage.FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    hideLoadingState();
+
+                    // Load bitmap and display
+                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    if (bitmap != null) {
+                        imageView.setImageBitmap(bitmap);
+                        Log.d(TAG, "Image loaded successfully");
+                    } else {
+                        showErrorMessage("Image Error", "Failed to decode image file.");
+                    }
+
+                    // Clean up temp file
+                    localFile.delete();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "Failed to load image from storage", e);
+                    hideLoadingState();
+                    showErrorMessage("Image Load Error", "Unable to download image file for viewing.");
+                }
+            });
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to create temp file for image", e);
+            hideLoadingState();
+            showErrorMessage("File Error", "Unable to create temporary file for image viewing.");
+        }
+    }
+
+    private void showLoadingState() {
+        hideAllViewers();
+        loadingProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoadingState() {
+        loadingProgressBar.setVisibility(View.GONE);
+    }
+
+    private void showImageViewer() {
+        hideAllViewers();
+        imageView.setVisibility(View.VISIBLE);
+    }
+
+    private void showWebViewer() {
+        hideAllViewers();
+        documentWebView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAllViewers() {
+        imageView.setVisibility(View.GONE);
+        documentWebView.setVisibility(View.GONE);
+    }
+
+    private void showNoDocumentMessage() {
+        showWebViewer();
+        String noDocHtml = "<!DOCTYPE html>" +
+                "<html><head>" +
+                "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
+                "<style>" +
+                "body { padding:20px; text-align:center; background-color:#e3f2fd; border:2px solid #90caf9; border-radius:12px; margin:15px; font-family:Arial,sans-serif; }" +
+                ".icon { font-size:48px; margin-bottom:15px; }" +
+                "h3 { color:#1565c0; margin:10px 0; }" +
+                "p { color:#1976d2; margin:8px 0; line-height:1.4; }" +
+                "</style>" +
+                "</head><body>" +
+                "<div class='icon'>📄</div>" +
+                "<h3>No Document</h3>" +
+                "<p>No document has been uploaded for this item.</p>" +
+                "<p><strong>Select a file to upload and view.</strong></p>" +
+                "</body></html>";
+        documentWebView.loadData(noDocHtml, "text/html", "UTF-8");
+    }
+
+    private void showErrorMessage(String title, String message) {
+        showWebViewer();
+        String errorHtml = "<!DOCTYPE html>" +
+                "<html><head>" +
+                "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
+                "<style>" +
+                "body { padding:20px; text-align:center; background-color:#ffebee; border:2px solid #ef9a9a; border-radius:12px; margin:15px; font-family:Arial,sans-serif; }" +
+                ".icon { font-size:48px; margin-bottom:15px; }" +
+                "h3 { color:#c62828; margin:10px 0; }" +
+                "p { color:#d32f2f; margin:8px 0; line-height:1.4; }" +
+                "</style>" +
+                "</head><body>" +
+                "<div class='icon'>⚠️</div>" +
+                "<h3>" + title + "</h3>" +
+                "<p>" + message + "</p>" +
+                "<p><strong>Try downloading the file to view it externally.</strong></p>" +
                 "</body></html>";
         documentWebView.loadData(errorHtml, "text/html", "UTF-8");
+    }
+
+    private void showUnsupportedFileMessage(String fileName, String fileType) {
+        showWebViewer();
+        String extension = getFileExtension(fileName).toUpperCase();
+        String unsupportedHtml = "<!DOCTYPE html>" +
+                "<html><head>" +
+                "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
+                "<style>" +
+                "body { padding:20px; text-align:center; background-color:#fff3cd; border:2px solid #ffeaa7; border-radius:12px; margin:15px; font-family:Arial,sans-serif; }" +
+                ".icon { font-size:48px; margin-bottom:15px; }" +
+                "h3 { color:#856404; margin:10px 0; }" +
+                "p { color:#856404; margin:8px 0; line-height:1.4; }" +
+                ".file-type { font-weight:bold; color:#d4800d; background:#ffeaa7; padding:4px 8px; border-radius:4px; }" +
+                "</style>" +
+                "</head><body>" +
+                "<div class='icon'>📄</div>" +
+                "<h3>Preview Not Available</h3>" +
+                "<p>File: <strong>" + fileName + "</strong></p>" +
+                "<p>Type: <span class='file-type'>" + extension + "</span></p>" +
+                "<p>This file type cannot be previewed in the app.</p>" +
+                "<p><strong>Use the buttons below to download or open externally.</strong></p>" +
+                "</body></html>";
+        documentWebView.loadData(unsupportedHtml, "text/html", "UTF-8");
+    }
+
+    private String determineFileType(String fileName, String mimeType) {
+        // Check MIME type first
+        if (mimeType != null) {
+            if (mimeType.equals("application/pdf")) {
+                return "pdf";
+            } else if (mimeType.startsWith("image/")) {
+                return "image";
+            }
+        }
+
+        // Fallback to file extension
+        if (fileName != null) {
+            String extension = getFileExtension(fileName).toLowerCase();
+            switch (extension) {
+                case "pdf":
+                    return "pdf";
+                case "jpg":
+                case "jpeg":
+                case "png":
+                case "gif":
+                case "webp":
+                case "bmp":
+                    return "image";
+                default:
+                    return "unsupported";
+            }
+        }
+
+        return "unsupported";
+    }
+
+    private String getFileExtension(String fileName) {
+        if (fileName == null || !fileName.contains(".")) {
+            return "";
+        }
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+
+    private String formatFileSize(String fileSizeStr) {
+        if (fileSizeStr == null || fileSizeStr.isEmpty()) {
+            return "Unknown size";
+        }
+
+        try {
+            long bytes = Long.parseLong(fileSizeStr);
+            if (bytes < 1024) return bytes + " B";
+            int exp = (int) (Math.log(bytes) / Math.log(1024));
+            String pre = "KMGTPE".charAt(exp - 1) + "B";
+            return String.format("%.1f %s", bytes / Math.pow(1024, exp), pre);
+        } catch (NumberFormatException e) {
+            return "Unknown size";
+        }
     }
 
     private void setupCategorySpecificFields() {
@@ -259,10 +562,8 @@ public class ItemViewerFragment extends Fragment {
 
     private void setupButtons() {
         if ("documents".equals(category)) {
-            // Use DocumentUploadManager for file selection
             String[] allowedMimeTypes = {"application/pdf", "image/*"};
             uploadManager.setupUploadButton(selectFileButton, allowedMimeTypes);
-
             downloadButton.setOnClickListener(v -> downloadDocument());
         }
 
@@ -300,183 +601,6 @@ public class ItemViewerFragment extends Fragment {
         });
     }
 
-    private void loadDocumentFileData(DataSnapshot dataSnapshot) {
-        currentBlobReference = dataSnapshot.child("blobReference").getValue(String.class);
-        currentFileName = dataSnapshot.child("originalFileName").getValue(String.class);
-        currentFileSize = dataSnapshot.child("fileSize").getValue(String.class);
-        currentMimeType = dataSnapshot.child("mimeType").getValue(String.class);
-
-        if (currentBlobReference != null && currentFileName != null) {
-            // Display file info
-            String fileSizeText = formatFileSize(currentFileSize);
-            fileInfoTextView.setText("Current file: " + currentFileName + " (" + fileSizeText + ")");
-
-            // Get download URL from blob reference
-            uploadManager.getDownloadUrl(currentBlobReference, new DocumentUploadManager.DownloadUrlCallback() {
-                @Override
-                public void onSuccess(Uri downloadUrl) {
-                    currentDownloadUrl = downloadUrl;
-                    downloadButton.setEnabled(true);
-                    copyLinkButton.setVisibility(View.VISIBLE);
-                    downloadLinkTextView.setVisibility(View.VISIBLE);
-                    downloadLinkTextView.setText("✅ File ready for download and sharing");
-                    downloadLinkTextView.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
-
-                    // Load document preview
-                    loadDocumentPreview(downloadUrl, currentFileName, currentMimeType);
-                }
-
-                @Override
-                public void onFailure(String error) {
-                    Log.e(TAG, "Failed to get download URL: " + error);
-                    fileInfoTextView.setText("Error loading file: " + currentFileName);
-                    downloadButton.setEnabled(false);
-                    copyLinkButton.setVisibility(View.GONE);
-                    downloadLinkTextView.setVisibility(View.VISIBLE);
-                    downloadLinkTextView.setText("❌ Error loading download options");
-                    downloadLinkTextView.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
-                    showWebViewError("File Loading Error", "Unable to load the document file.");
-                }
-            });
-        } else {
-            fileInfoTextView.setText("No file uploaded");
-            downloadButton.setEnabled(false);
-            copyLinkButton.setVisibility(View.GONE);
-            downloadLinkTextView.setVisibility(View.GONE);
-            showWebViewError("No Document", "No document has been uploaded for this item. Select a file to upload and view.");
-        }
-    }
-
-    private String formatFileSize(String fileSizeStr) {
-        if (fileSizeStr == null || fileSizeStr.isEmpty()) {
-            return "Unknown size";
-        }
-
-        try {
-            long bytes = Long.parseLong(fileSizeStr);
-            if (bytes < 1024) return bytes + " B";
-            int exp = (int) (Math.log(bytes) / Math.log(1024));
-            String pre = "KMGTPE".charAt(exp - 1) + "B";
-            return String.format("%.1f %s", bytes / Math.pow(1024, exp), pre);
-        } catch (NumberFormatException e) {
-            return "Unknown size";
-        }
-    }
-
-    private void loadDocumentPreview(Uri downloadUrl, String fileName, String mimeType) {
-        if (downloadUrl == null) {
-            showWebViewError("Preview Error", "Cannot generate preview URL");
-            return;
-        }
-
-        Log.d(TAG, "Loading preview for: " + fileName + " (MIME: " + mimeType + ")");
-
-        // Determine file type from MIME type or filename
-        String fileType = determineFileType(fileName, mimeType);
-
-        switch (fileType) {
-            case "pdf":
-                loadPdfPreview(downloadUrl);
-                break;
-            case "image":
-                loadImagePreview(downloadUrl, fileName);
-                break;
-            default:
-                showUnsupportedFilePreview(fileName, fileType);
-                break;
-        }
-    }
-
-    private String determineFileType(String fileName, String mimeType) {
-        // Check MIME type first
-        if (mimeType != null) {
-            if (mimeType.equals("application/pdf")) {
-                return "pdf";
-            } else if (mimeType.startsWith("image/")) {
-                return "image";
-            }
-        }
-
-        // Fallback to file extension
-        if (fileName != null) {
-            String extension = getFileExtension(fileName).toLowerCase();
-            switch (extension) {
-                case "pdf":
-                    return "pdf";
-                case "jpg":
-                case "jpeg":
-                case "png":
-                case "gif":
-                case "webp":
-                case "bmp":
-                    return "image";
-                default:
-                    return "unsupported";
-            }
-        }
-
-        return "unsupported";
-    }
-
-    private void loadPdfPreview(Uri downloadUrl) {
-        // Use Google Docs viewer for PDFs
-        String pdfViewerUrl = "https://docs.google.com/gview?embedded=true&url=" + downloadUrl.toString();
-        Log.d(TAG, "Loading PDF preview: " + pdfViewerUrl);
-        documentWebView.loadUrl(pdfViewerUrl);
-    }
-
-    private void loadImagePreview(Uri downloadUrl, String fileName) {
-        // Create responsive HTML for image display
-        String imageHtml = "<!DOCTYPE html>" +
-                "<html><head>" +
-                "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
-                "<style>" +
-                "body { margin:0; padding:15px; text-align:center; background-color:#f8f9fa; font-family:Arial,sans-serif; }" +
-                "img { max-width:100%; height:auto; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); background:#fff; }" +
-                ".filename { margin-bottom:10px; color:#666; font-size:14px; }" +
-                "</style>" +
-                "</head><body>" +
-                "<div class='filename'>" + fileName + "</div>" +
-                "<img src='" + downloadUrl.toString() + "' alt='Document Image' onclick='this.style.maxWidth=this.style.maxWidth===\"none\"?\"100%\":\"none\"'/>" +
-                "<p style='margin-top:15px; color:#888; font-size:12px;'>Tap image to toggle full size</p>" +
-                "</body></html>";
-
-        Log.d(TAG, "Loading image preview for: " + fileName);
-        documentWebView.loadData(imageHtml, "text/html", "UTF-8");
-    }
-
-    private void showUnsupportedFilePreview(String fileName, String fileType) {
-        String extension = getFileExtension(fileName).toUpperCase();
-        String unsupportedHtml = "<!DOCTYPE html>" +
-                "<html><head>" +
-                "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
-                "<style>" +
-                "body { padding:20px; text-align:center; background-color:#fff3cd; border:2px solid #ffeaa7; border-radius:12px; margin:15px; font-family:Arial,sans-serif; }" +
-                ".icon { font-size:48px; margin-bottom:15px; }" +
-                "h3 { color:#856404; margin:10px 0; }" +
-                "p { color:#856404; margin:8px 0; line-height:1.4; }" +
-                ".file-type { font-weight:bold; color:#d4800d; background:#ffeaa7; padding:4px 8px; border-radius:4px; }" +
-                "</style>" +
-                "</head><body>" +
-                "<div class='icon'>📄</div>" +
-                "<h3>Preview Not Available</h3>" +
-                "<p>File: <strong>" + fileName + "</strong></p>" +
-                "<p>Type: <span class='file-type'>" + extension + "</span></p>" +
-                "<p>This file type cannot be previewed in the app.</p>" +
-                "<p><strong>Use the download button below to view this file externally.</strong></p>" +
-                "</body></html>";
-
-        Log.d(TAG, "Showing unsupported file preview for: " + fileName);
-        documentWebView.loadData(unsupportedHtml, "text/html", "UTF-8");
-    }
-
-    private String getFileExtension(String fileName) {
-        if (fileName == null || !fileName.contains(".")) {
-            return "";
-        }
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
-    }
-
     private void downloadDocument() {
         if (currentDownloadUrl != null && currentFileName != null) {
             try {
@@ -510,7 +634,6 @@ public class ItemViewerFragment extends Fragment {
             ClipData clip = ClipData.newPlainText("Document Download Link", currentDownloadUrl.toString());
             clipboard.setPrimaryClip(clip);
 
-            // Show confirmation with file name
             String fileName = currentFileName != null ? currentFileName : "document";
             Toast.makeText(getContext(), "📋 Download link copied to clipboard!\n(" + fileName + ")", Toast.LENGTH_SHORT).show();
 
@@ -520,23 +643,13 @@ public class ItemViewerFragment extends Fragment {
         }
     }
 
-    private void openDirectDownloadLink() {
-        if (currentDownloadUrl != null) {
-            openFileExternally();
-        } else {
-            Toast.makeText(getContext(), "Download link not available", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void openFileExternally() {
         if (currentDownloadUrl != null) {
             Intent intent = new Intent(Intent.ACTION_VIEW, currentDownloadUrl);
 
-            // Set appropriate MIME type
             if (currentMimeType != null && !currentMimeType.isEmpty()) {
                 intent.setType(currentMimeType);
             } else {
-                // Fallback based on file extension
                 String extension = getFileExtension(currentFileName).toLowerCase();
                 switch (extension) {
                     case "pdf":
@@ -581,13 +694,11 @@ public class ItemViewerFragment extends Fragment {
         Map<String, String> formData = getFieldUpdates();
 
         if ("documents".equals(category) && uploadManager.hasSelectedFile()) {
-            // Update with file using DocumentUploadManager
             uploadManager.updateExistingItem(itemRef, formData, currentBlobReference, new DocumentUploadManager.UploadCallback() {
                 @Override
                 public void onUploadSuccess(String message) {
                     Toast.makeText(getContext(), "Document updated successfully!", Toast.LENGTH_SHORT).show();
                     resetUpdateButton();
-                    // Reload data to show updated file
                     loadItemData();
                 }
 
@@ -598,7 +709,6 @@ public class ItemViewerFragment extends Fragment {
                 }
             });
         } else {
-            // Update text fields only
             updateDatabaseOnly(formData);
         }
     }

@@ -31,7 +31,7 @@
         <LinearLayout
             android:id="@+id/fileSection"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
             android:orientation="vertical"
@@ -55,29 +55,60 @@
                 android:text="No file selected"
                 android:textSize="14sp" />
 
-            <!-- Document Preview WebView -->
-            <WebView
-                android:id="@+id/documentWebView"
+            <!-- Document Viewer Container -->
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="400dp"
                 android:layout_marginBottom="12dp"
                 android:background="#FFFFFF"
-                android:scrollbars="vertical|horizontal" />
+                android:elevation="2dp">
+
+                <!-- Native Image Viewer -->
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:background="#FFFFFF"
+                    android:contentDescription="Document Image"
+                    android:visibility="gone" />
+
+                <!-- WebView for HTML messages and fallback -->
+                <WebView
+                    android:id="@+id/documentWebView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#FFFFFF"
+                    android:scrollbars="vertical|horizontal"
+                    android:visibility="gone" />
+
+                <!-- Loading Progress Bar -->
+                <ProgressBar
+                    android:id="@+id/loadingProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:visibility="gone" />
+
+            </FrameLayout>
 
             <!-- Download Controls Section -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="📥 Download Options"
+                android:text="📥 File Actions"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="#666666" />
 
-            <!-- Main Action Buttons (Download, Copy, Select) -->
+            <!-- Main Action Buttons Row 1 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -93,14 +124,14 @@
                     android:textSize="12sp" />
 
                 <Button
-                    android:id="@+id/copyLinkButton"
+                    android:id="@+id/openExternalButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_weight="1"
-                    android:backgroundTint="#2196F3"
-                    android:text="📋 Copy Link"
+                    android:backgroundTint="#9C27B0"
+                    android:text="📱 Open App"
                     android:textColor="@android:color/white"
                     android:textSize="12sp"
                     android:visibility="gone" />
@@ -118,6 +149,33 @@
 
             </LinearLayout>
 
+            <!-- Main Action Buttons Row 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/copyLinkButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#2196F3"
+                    android:text="📋 Copy Share Link"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <!-- Spacer for consistent layout -->
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="invisible" />
+
+            </LinearLayout>
+
             <!-- Download Status Text -->
             <TextView
                 android:id="@+id/downloadStatusTextView"
@@ -125,7 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="📥 Download options will appear when file is loaded"
+                android:text="📥 File options will appear when loaded"
                 android:textColor="#999999"
                 android:textSize="12sp"
                 android:visibility="gone" />
