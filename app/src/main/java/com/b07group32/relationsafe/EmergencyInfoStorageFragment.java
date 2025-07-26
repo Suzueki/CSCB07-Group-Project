@@ -30,6 +30,7 @@ public class EmergencyInfoStorageFragment extends Fragment
 
     private RecyclerView documentsListView, contactsListView, locationsListView, medicationsListView;
     private Button buttonAddDocument, buttonAddContact, buttonAddLocation, buttonAddMedication;
+    private Button buttonViewDocument, buttonViewContact, buttonViewLocation, buttonViewMedication; // View buttons for all categories
     private Button buttonDeleteDocument, buttonDeleteContact, buttonDeleteLocation, buttonDeleteMedication;
     private Button buttonBack;
 
@@ -106,6 +107,11 @@ public class EmergencyInfoStorageFragment extends Fragment
         buttonAddLocation = view.findViewById(R.id.buttonAddLocation);
         buttonAddMedication = view.findViewById(R.id.buttonAddMedication);
 
+        buttonViewDocument = view.findViewById(R.id.buttonViewDocument); // Initialize view buttons
+        buttonViewContact = view.findViewById(R.id.buttonViewContact);
+        buttonViewLocation = view.findViewById(R.id.buttonViewLocation);
+        buttonViewMedication = view.findViewById(R.id.buttonViewMedication);
+
         buttonDeleteDocument = view.findViewById(R.id.buttonDeleteDocument);
         buttonDeleteContact = view.findViewById(R.id.buttonDeleteContact);
         buttonDeleteLocation = view.findViewById(R.id.buttonDeleteLocation);
@@ -138,18 +144,22 @@ public class EmergencyInfoStorageFragment extends Fragment
         {
             case "documents":
                 documentsAdapter.setSelectedPosition(position);
+                buttonViewDocument.setEnabled(true);
                 buttonDeleteDocument.setEnabled(true);
                 break;
             case "contacts":
                 contactsAdapter.setSelectedPosition(position);
+                buttonViewContact.setEnabled(true);
                 buttonDeleteContact.setEnabled(true);
                 break;
             case "locations":
                 locationsAdapter.setSelectedPosition(position);
+                buttonViewLocation.setEnabled(true);
                 buttonDeleteLocation.setEnabled(true);
                 break;
             case "medications":
                 medicationsAdapter.setSelectedPosition(position);
+                buttonViewMedication.setEnabled(true);
                 buttonDeleteMedication.setEnabled(true);
                 break;
         }
@@ -162,12 +172,35 @@ public class EmergencyInfoStorageFragment extends Fragment
         buttonAddLocation.setOnClickListener(v -> dialogManager.showLocationDialog());
         buttonAddMedication.setOnClickListener(v -> dialogManager.showMedicationDialog());
 
+        buttonViewDocument.setOnClickListener(v -> viewSelectedItem("documents", documentsAdapter, documentsKeys, documentsList));
+        buttonViewContact.setOnClickListener(v -> viewSelectedItem("contacts", contactsAdapter, contactsKeys, contactsList));
+        buttonViewLocation.setOnClickListener(v -> viewSelectedItem("locations", locationsAdapter, locationsKeys, locationsList));
+        buttonViewMedication.setOnClickListener(v -> viewSelectedItem("medications", medicationsAdapter, medicationsKeys, medicationsList));
+
         buttonDeleteDocument.setOnClickListener(v -> deleteSelectedItem("documents", documentsAdapter));
         buttonDeleteContact.setOnClickListener(v -> deleteSelectedItem("contacts", contactsAdapter));
         buttonDeleteLocation.setOnClickListener(v -> deleteSelectedItem("locations", locationsAdapter));
         buttonDeleteMedication.setOnClickListener(v -> deleteSelectedItem("medications", medicationsAdapter));
 
         buttonBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
+    }
+
+    private void viewSelectedItem(String category, SimpleItemAdapter adapter, List<String> keys, List<String> items)
+    {
+        int pos = adapter.getSelectedPosition();
+        if (pos != RecyclerView.NO_POSITION && pos < keys.size())
+        {
+            String itemKey = keys.get(pos);
+            String itemTitle = items.get(pos);
+
+            ItemViewerFragment viewerFragment = ItemViewerFragment.newInstance(itemKey, itemTitle, category);
+
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, viewerFragment) // Adjust container ID as needed
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     private void deleteSelectedItem(String category, SimpleItemAdapter adapter)
@@ -198,6 +231,10 @@ public class EmergencyInfoStorageFragment extends Fragment
 
     private void disableAllDeleteButtons()
     {
+        buttonViewDocument.setEnabled(false);
+        buttonViewContact.setEnabled(false);
+        buttonViewLocation.setEnabled(false);
+        buttonViewMedication.setEnabled(false);
         buttonDeleteDocument.setEnabled(false);
         buttonDeleteContact.setEnabled(false);
         buttonDeleteLocation.setEnabled(false);

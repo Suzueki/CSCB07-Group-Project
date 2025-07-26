@@ -52,6 +52,18 @@
                     android:textSize="12sp" />
 
                 <Button
+                    android:id="@+id/buttonViewDocument"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#2196F3"
+                    android:enabled="false"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="View"
+                    android:textSize="12sp" />
+
+                <Button
                     android:id="@+id/buttonDeleteDocument"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -103,6 +115,18 @@
                     android:minHeight="0dp"
                     android:padding="8dp"
                     android:text="+ Add"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/buttonViewContact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#2196F3"
+                    android:enabled="false"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="View"
                     android:textSize="12sp" />
 
                 <Button
@@ -160,6 +184,18 @@
                     android:textSize="12sp" />
 
                 <Button
+                    android:id="@+id/buttonViewLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#2196F3"
+                    android:enabled="false"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="View"
+                    android:textSize="12sp" />
+
+                <Button
                     android:id="@+id/buttonDeleteLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -211,6 +247,18 @@
                     android:minHeight="0dp"
                     android:padding="8dp"
                     android:text="+ Add"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/buttonViewMedication"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#2196F3"
+                    android:enabled="false"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="View"
                     android:textSize="12sp" />
 
                 <Button
