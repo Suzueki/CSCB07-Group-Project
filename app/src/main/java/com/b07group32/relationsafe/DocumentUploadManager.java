@@ -34,14 +34,14 @@ class DocumentUploadManager {
     private String selectedFileName;
     private Button currentUploadButton;
 
-    // Callback interface for file selection
-    public interface FileSelectionCallback {
+    public interface FileSelectionCallback
+    {
         void onFileSelected(String fileName);
         void onFileSelectionFailed(String error);
     }
 
-    // Callback interface for upload completion
-    public interface UploadCallback {
+    public interface UploadCallback
+    {
         void onUploadSuccess(String message);
         void onUploadFailure(String error);
     }
@@ -135,8 +135,8 @@ class DocumentUploadManager {
         button.setOnClickListener(v -> openFilePicker(mimeTypes));
     }
 
-    // New method for file selection without button binding
-    public void selectFile(String[] mimeTypes, FileSelectionCallback callback) {
+    public void selectFile(String[] mimeTypes, FileSelectionCallback callback)
+    {
         this.fileSelectionCallback = callback;
         openFilePicker(mimeTypes);
     }
@@ -172,25 +172,32 @@ class DocumentUploadManager {
         uploadAndSave(category, formData, null);
     }
 
-    public void uploadAndSave(String category, Map<String, String> formData, UploadCallback callback) {
+    public void uploadAndSave(String category, Map<String, String> formData, UploadCallback callback)
+    {
         this.uploadCallback = callback;
         Log.d(TAG, "uploadAndSave called for category: " + category);
 
-        if (selectedFileUri != null) {
+        if (selectedFileUri != null)
+        {
             Log.d(TAG, "Uploading blob to Storage, metadata to Realtime DB: " + selectedFileName);
             uploadFile(category, formData, selectedFileUri);
-        } else {
+        }
+        else
+        {
             Log.d(TAG, "No file selected, saving form data only to Realtime DB");
             saveMetadata(category, formData, null, null);
         }
     }
 
-    private void uploadFileForUpdate(DatabaseReference itemRef, Map<String, String> formData, Uri fileUri, String oldBlobReference) {
-        if (currentUser == null) {
+    private void uploadFileForUpdate(DatabaseReference itemRef, Map<String, String> formData, Uri fileUri, String oldBlobReference)
+    {
+        if (currentUser == null)
+        {
             String error = "Authentication error";
             Log.e(TAG, error);
             Toast.makeText(fragment.getContext(), error, Toast.LENGTH_SHORT).show();
-            if (uploadCallback != null) {
+            if (uploadCallback != null)
+            {
                 uploadCallback.onUploadFailure(error);
             }
             return;
@@ -210,58 +217,73 @@ class DocumentUploadManager {
 
             UploadTask uploadTask = blobRef.putFile(fileUri);
 
-            uploadTask.addOnProgressListener(taskSnapshot -> {
+            uploadTask.addOnProgressListener(taskSnapshot ->
+            {
                 double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                 Log.d(TAG, "Blob upload progress: " + progress + "%");
-            }).addOnSuccessListener(taskSnapshot -> {
+            }).addOnSuccessListener(taskSnapshot ->
+            {
                 Log.d(TAG, "Blob upload successful to Storage");
-
                 String blobReference = blobRef.getPath();
 
-                // Delete old blob if it exists
-                if (oldBlobReference != null && !oldBlobReference.isEmpty()) {
+                // delete old blob if it exists
+                if (oldBlobReference != null && !oldBlobReference.isEmpty())
+                {
                     StorageReference oldBlobRef = storage.getReference().child(oldBlobReference);
-                    oldBlobRef.delete().addOnSuccessListener(aVoid -> {
+                    oldBlobRef.delete().addOnSuccessListener(aVoid ->
+                    {
                         Log.d(TAG, "Old blob deleted successfully");
-                    }).addOnFailureListener(e -> {
+                    }).addOnFailureListener(e ->
+                    {
                         Log.w(TAG, "Failed to delete old blob: " + e.getMessage());
                     });
                 }
 
-                // Update item with new blob information
+                // update item with new blob
                 updateItemWithBlobRef(itemRef, formData, blobReference, selectedFileName, blobId);
 
-            }).addOnFailureListener(e -> {
+            }).addOnFailureListener(e ->
+            {
                 Log.e(TAG, "Blob upload failed", e);
                 String errorMessage = "Upload failed: " + e.getMessage();
 
-                if (e.getMessage() != null) {
-                    if (e.getMessage().contains("permission")) {
-                        errorMessage = "Permission denied. Check Firebase Storage rules.";
-                    } else if (e.getMessage().contains("network")) {
+                if (e.getMessage() != null)
+                {
+                    if (e.getMessage().contains("permission"))
+                    {
+                        errorMessage = "Something has gone catastrophically wrong! If you're seeing this, tell Maruti.";
+                    }
+                    else if (e.getMessage().contains("network"))
+                    {
                         errorMessage = "Network error. Check your internet connection.";
-                    } else if (e.getMessage().contains("quota")) {
+                    }
+                    else if (e.getMessage().contains("quota"))
+                    {
                         errorMessage = "Files are too big.";
                     }
                 }
 
                 Toast.makeText(fragment.getContext(), errorMessage, Toast.LENGTH_LONG).show();
-                if (uploadCallback != null) {
+                if (uploadCallback != null)
+                {
                     uploadCallback.onUploadFailure(errorMessage);
                 }
             });
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             Log.e(TAG, "Exception during blob upload setup", e);
             String error = "Error preparing upload: " + e.getMessage();
             Toast.makeText(fragment.getContext(), error, Toast.LENGTH_LONG).show();
-            if (uploadCallback != null) {
+            if (uploadCallback != null)
+            {
                 uploadCallback.onUploadFailure(error);
             }
         }
     }
 
-    private void updateItemWithBlobRef(DatabaseReference itemRef, Map<String, String> formData, String blobReference, String originalFileName, String blobId) {
+    private void updateItemWithBlobRef(DatabaseReference itemRef, Map<String, String> formData, String blobReference, String originalFileName, String blobId)
+    {
         Log.d(TAG, "Updating item with new file metadata");
 
         formData.put("timestamp", String.valueOf(System.currentTimeMillis()));
@@ -272,44 +294,53 @@ class DocumentUploadManager {
         formData.put("mimeType", FileUtils.getMimeType(fragment.getContext(), selectedFileUri));
 
         itemRef.updateChildren((Map) formData)
-                .addOnSuccessListener(aVoid -> {
+                .addOnSuccessListener(aVoid ->
+                {
                     Log.d(TAG, "Item updated successfully with new file");
                     String success = "Item updated successfully with new file";
                     Toast.makeText(fragment.getContext(), success, Toast.LENGTH_SHORT).show();
-                    if (uploadCallback != null) {
+                    if (uploadCallback != null)
+                    {
                         uploadCallback.onUploadSuccess(success);
                     }
                     clearSelection();
                 })
-                .addOnFailureListener(e -> {
+                .addOnFailureListener(e ->
+                {
                     Log.e(TAG, "Failed to update item with file metadata", e);
                     String error = "Failed to update: " + e.getMessage();
                     Toast.makeText(fragment.getContext(), error, Toast.LENGTH_LONG).show();
-                    if (uploadCallback != null) {
+                    if (uploadCallback != null)
+                    {
                         uploadCallback.onUploadFailure(error);
                     }
                 });
     }
 
-    private void updateItemMetadata(DatabaseReference itemRef, Map<String, String> formData) {
+    private void updateItemMetadata(DatabaseReference itemRef, Map<String, String> formData)
+    {
         Log.d(TAG, "Updating item metadata only (no file change)");
 
         formData.put("timestamp", String.valueOf(System.currentTimeMillis()));
 
         itemRef.updateChildren((Map) formData)
-                .addOnSuccessListener(aVoid -> {
+                .addOnSuccessListener(aVoid ->
+                {
                     Log.d(TAG, "Item metadata updated successfully");
                     String success = "Item updated successfully";
                     Toast.makeText(fragment.getContext(), success, Toast.LENGTH_SHORT).show();
-                    if (uploadCallback != null) {
+                    if (uploadCallback != null)
+                    {
                         uploadCallback.onUploadSuccess(success);
                     }
                 })
-                .addOnFailureListener(e -> {
+                .addOnFailureListener(e ->
+                {
                     Log.e(TAG, "Failed to update item metadata", e);
                     String error = "Failed to update: " + e.getMessage();
                     Toast.makeText(fragment.getContext(), error, Toast.LENGTH_LONG).show();
-                    if (uploadCallback != null) {
+                    if (uploadCallback != null)
+                    {
                         uploadCallback.onUploadFailure(error);
                     }
                 });
@@ -359,7 +390,7 @@ class DocumentUploadManager {
 
                 Log.d(TAG, "Blob reference: " + blobReference);
 
-                // Store ALL file information in Realtime Database
+                // Store ALL file information in realtimeDB
                 saveMetadataWithBlobRef(category, formData, blobReference, selectedFileName, blobId);
 
                 String success = "File uploaded successfully!";
@@ -368,7 +399,7 @@ class DocumentUploadManager {
                     uploadCallback.onUploadSuccess(success);
                 }
 
-                // Reset the button
+                // reset button
                 if (currentUploadButton != null)
                 {
                     currentUploadButton.setText("Select Document");
@@ -385,7 +416,7 @@ class DocumentUploadManager {
                 if (e.getMessage() != null) {
                     if (e.getMessage().contains("permission"))
                     {
-                        errorMessage = "Permission denied. Check Firebase Storage rules.";
+                        errorMessage = "Tell Maruti to check his credit card statement for $0.02. Please?";
                     }
                     else if (e.getMessage().contains("network"))
                     {
@@ -398,7 +429,8 @@ class DocumentUploadManager {
                 }
 
                 Toast.makeText(fragment.getContext(), errorMessage, Toast.LENGTH_LONG).show();
-                if (uploadCallback != null) {
+                if (uploadCallback != null)
+                {
                     uploadCallback.onUploadFailure(errorMessage);
                 }
             });
@@ -409,7 +441,8 @@ class DocumentUploadManager {
             Log.e(TAG, "Exception during blob upload setup", e);
             String error = "Error preparing upload: " + e.getMessage();
             Toast.makeText(fragment.getContext(), error, Toast.LENGTH_LONG).show();
-            if (uploadCallback != null) {
+            if (uploadCallback != null)
+            {
                 uploadCallback.onUploadFailure(error);
             }
         }
@@ -545,8 +578,10 @@ class DocumentUploadManager {
     }
 
     // Method to get download URL from blob reference
-    public void getDownloadUrl(String blobReference, DownloadUrlCallback callback) {
-        if (blobReference == null || blobReference.isEmpty()) {
+    public void getDownloadUrl(String blobReference, DownloadUrlCallback callback)
+    {
+        if (blobReference == null || blobReference.isEmpty())
+        {
             callback.onFailure("Invalid blob reference");
             return;
         }
@@ -558,14 +593,18 @@ class DocumentUploadManager {
     }
 
 
-    public void setupUpdateButton(Button button, String[] mimeTypes, String currentFileName) {
+    public void setupUpdateButton(Button button, String[] mimeTypes, String currentFileName)
+    {
         currentUploadButton = button;
         selectedFileUri = null;
         selectedFileName = null;
 
-        if (currentFileName != null && !currentFileName.isEmpty()) {
+        if (currentFileName != null && !currentFileName.isEmpty())
+        {
             button.setText("Current: " + currentFileName + " (Tap to change)");
-        } else {
+        }
+        else
+        {
             button.setText("Select Document");
         }
 
@@ -573,13 +612,13 @@ class DocumentUploadManager {
     }
 
     // Method to check if user has selected a new file for update
-    public boolean hasNewFileSelected() {
-        return selectedFileUri != null;
-    }
+    public boolean hasNewFileSelected() {return selectedFileUri != null;}
 
     // Method to get current selection info for display
-    public String getSelectionInfo() {
-        if (selectedFileUri != null && selectedFileName != null) {
+    public String getSelectionInfo()
+    {
+        if (selectedFileUri != null && selectedFileName != null)
+        {
             long fileSize = getSelectedFileSize();
             String sizeText = formatFileSize(fileSize);
             return "New file selected: " + selectedFileName + " (" + sizeText + ")";
@@ -587,33 +626,42 @@ class DocumentUploadManager {
         return null;
     }
 
-    // Helper method to format file size
-    private String formatFileSize(long bytes) {
+    //so we can read file sizes more easily
+    private String formatFileSize(long bytes)
+    {
         if (bytes < 1024) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(1024));
+        //kilo, mega, giga, tera, peta, exa
+        //please don't upload an file bomb to firebase storage. I'm fine if you decide to test with a megabyte
         String pre = "KMGTPE".charAt(exp - 1) + "B";
         return String.format("%.1f %s", bytes / Math.pow(1024, exp), pre);
     }
 
     // Enhanced method to handle file updates with better error handling
     public void updateExistingItem(DatabaseReference itemRef, Map<String, String> formData,
-                                   String oldBlobReference, UploadCallback callback) {
+                                   String oldBlobReference, UploadCallback callback)
+    {
         this.uploadCallback = callback;
 
         Log.d(TAG, "Updating item - Has new file: " + (selectedFileUri != null));
 
-        if (selectedFileUri != null) {
+        if (selectedFileUri != null)
+        {
             // Upload new file and update the item
             uploadFileForUpdate(itemRef, formData, selectedFileUri, oldBlobReference);
-        } else {
-            // Just update the text fields
+        }
+        else
+        {
+            // just update the text fields
             updateItemMetadata(itemRef, formData);
         }
     }
 
     // Method to get file info from blob reference (useful for previews)
-    public void getFileInfo(String blobReference, FileInfoCallback callback) {
-        if (blobReference == null || blobReference.isEmpty()) {
+    public void getFileInfo(String blobReference, FileInfoCallback callback)
+    {
+        if (blobReference == null || blobReference.isEmpty())
+        {
             callback.onFailure("Invalid blob reference");
             return;
         }
@@ -621,7 +669,8 @@ class DocumentUploadManager {
         StorageReference blobRef = storage.getReference().child(blobReference);
 
         blobRef.getMetadata()
-                .addOnSuccessListener(storageMetadata -> {
+                .addOnSuccessListener(storageMetadata ->
+                {
                     String name = storageMetadata.getName();
                     long size = storageMetadata.getSizeBytes();
                     String contentType = storageMetadata.getContentType();
@@ -630,117 +679,133 @@ class DocumentUploadManager {
                 })
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
-    public interface DownloadUrlCallback {
+    public interface DownloadUrlCallback
+    {
         void onSuccess(Uri downloadUrl);
         void onFailure(String error);
     }
-    public interface FileInfoCallback {
+    public interface FileInfoCallback
+    {
         void onSuccess(String fileName, long fileSize, String mimeType);
         void onFailure(String error);
     }
 
-    // Method to validate file before upload (can be called from UI)
-    public boolean validateSelectedFile() {
-        if (selectedFileUri == null) {
+    public boolean validateSelectedFile()
+    {
+        if (selectedFileUri == null)
+        {
             return true; // No file selected is valid for updates
         }
 
         try {
             long fileSize = FileUtils.getFileSize(fragment.getContext(), selectedFileUri);
-            if (fileSize > MAX_FILE_SIZE) {
+            if (fileSize > MAX_FILE_SIZE)
+            {
                 String error = "File is too large. Maximum size is " + formatFileSize(MAX_FILE_SIZE) + ".";
                 Toast.makeText(fragment.getContext(), error, Toast.LENGTH_LONG).show();
-                if (fileSelectionCallback != null) {
+                if (fileSelectionCallback != null)
+                {
                     fileSelectionCallback.onFileSelectionFailed(error);
                 }
                 return false;
             }
             return true;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Log.e(TAG, "Error validating file", e);
             String error = "Error checking file: " + e.getMessage();
             Toast.makeText(fragment.getContext(), error, Toast.LENGTH_SHORT).show();
-            if (fileSelectionCallback != null) {
+            if (fileSelectionCallback != null)
+            {
                 fileSelectionCallback.onFileSelectionFailed(error);
             }
             return false;
         }
     }
 
-    // Method to reset selection state (useful after successful updates)
-    public void resetSelection() {
-        clearSelection();
-    }
+    // method to reset selection state (more so for user convenience)
+    public void resetSelection(){clearSelection();}
 
     // Enhanced clear selection with button state management
     public void clearSelection() {
         selectedFileUri = null;
         selectedFileName = null;
-        if (currentUploadButton != null) {
+        if (currentUploadButton != null)
+        {
             // Reset button text based on context
             String currentText = currentUploadButton.getText().toString();
-            if (currentText.contains("Current:")) {
+            if (currentText.contains("Current:"))
+            {
                 // This is an update button, restore the current file display
                 String currentFile = extractCurrentFileName(currentText);
-                if (currentFile != null) {
+                if (currentFile != null)
+                {
                     currentUploadButton.setText("Current: " + currentFile + " (Tap to change)");
-                } else {
+                }
+                else
+                {
                     currentUploadButton.setText("Select Document");
                 }
-            } else {
+            }
+            else
+            {
                 currentUploadButton.setText("Select Document");
             }
         }
     }
 
     // Helper method to extract current filename from button text
-    private String extractCurrentFileName(String buttonText) {
+    private String extractCurrentFileName(String buttonText)
+    {
         try {
-            if (buttonText.contains("Current: ") && buttonText.contains(" (Tap")) {
+            if (buttonText.contains("Current: ") && buttonText.contains(" (Tap"))
+            {
                 int start = buttonText.indexOf("Current: ") + 9;
                 int end = buttonText.indexOf(" (Tap");
                 return buttonText.substring(start, end);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Log.w(TAG, "Could not extract filename from button text", e);
         }
-        return null;
+        return "Couldn't get the file name but I need to pass SOMETHING back.";
     }
 
     // Method to get detailed file selection status for UI updates
-    public FileSelectionStatus getSelectionStatus() {
+    public FileSelectionStatus getSelectionStatus()
+    {
         return new FileSelectionStatus(
                 selectedFileUri != null,
                 selectedFileName,
                 selectedFileUri != null ? getSelectedFileSize() : 0,
                 selectedFileUri != null ? FileUtils.getMimeType(fragment.getContext(), selectedFileUri) : null
         );
+        //behold, the worst ternary operator statement in this eventual commit
     }
 
     // Class to hold file selection status
-    public static class FileSelectionStatus {
+    public static class FileSelectionStatus
+    {
         public final boolean hasFile;
         public final String fileName;
         public final long fileSize;
         public final String mimeType;
 
-        public FileSelectionStatus(boolean hasFile, String fileName, long fileSize, String mimeType) {
+        public FileSelectionStatus(boolean hasFile, String fileName, long fileSize, String mimeType)
+        {
             this.hasFile = hasFile;
             this.fileName = fileName;
             this.fileSize = fileSize;
             this.mimeType = mimeType;
         }
 
-        public String getFormattedSize() {
-            if (fileSize < 1024) return fileSize + " B";
-            int exp = (int) (Math.log(fileSize) / Math.log(1024));
-            String pre = "KMGTPE".charAt(exp - 1) + "B";
-            return String.format("%.1f %s", fileSize / Math.pow(1024, exp), pre);
-        }
     }
 
     // Enhanced upload progress callback interface
-    public interface UploadProgressCallback {
+    public interface UploadProgressCallback
+    {
         void onProgressUpdate(int progress);
         void onUploadComplete();
         void onUploadFailed(String error);
@@ -748,8 +813,10 @@ class DocumentUploadManager {
 
     // Method to upload with progress tracking
     public void uploadWithProgress(String category, Map<String, String> formData,
-                                   UploadProgressCallback progressCallback) {
-        this.uploadCallback = new UploadCallback() {
+                                   UploadProgressCallback progressCallback)
+    {
+        this.uploadCallback = new UploadCallback()
+        {
             @Override
             public void onUploadSuccess(String message) {
                 progressCallback.onUploadComplete();
@@ -760,8 +827,40 @@ class DocumentUploadManager {
                 progressCallback.onUploadFailed(error);
             }
         };
-
-        // Set up progress listener in uploadFile method
         uploadAndSave(category, formData);
+    }
+
+    public void addNewItemWithFile(String category, Map<String, String> formData, UploadCallback callback)
+    {
+        this.uploadCallback = callback;
+
+        if (!hasSelectedFile())
+        {
+            callback.onUploadFailure("No file selected");
+            return;
+        }
+
+        if (currentUser == null)
+        {
+            callback.onUploadFailure("User not authenticated");
+            return;
+        }
+
+        Log.d(TAG, "Adding new item with file for category: " + category);
+        uploadAndSave(category, formData, callback);
+    }
+
+    public void addNewItemWithoutFile(String category, Map<String, String> formData, UploadCallback callback)
+    {
+        this.uploadCallback = callback;
+
+        if (currentUser == null)
+        {
+            callback.onUploadFailure("User not authenticated");
+            return;
+        }
+
+        Log.d(TAG, "Adding new item without file for category: " + category);
+        saveMetadata(category, formData, null, null);
     }
 }

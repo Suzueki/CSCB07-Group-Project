@@ -30,12 +30,14 @@ public class FormBuilder
     {
         public LinearLayout layout;
         public EditText nameField, relationshipField, phoneField;
+        public Button uploadButton; // Add this field
     }
 
     public static class LocationForm
     {
         public LinearLayout layout;
         public EditText nameField, addressField, notesField;
+        public Button uploadButton; // Add this field
     }
 
     public static DocumentForm createDocumentForm(Context context)
@@ -149,5 +151,73 @@ public class FormBuilder
         }
 
         return formData;
+    }
+
+    public static ContactForm createContactFormWithUpload(Context context)
+    {
+        ContactForm form = new ContactForm();
+        form.layout = createBaseLayout(context);
+
+        form.nameField = createEditText(context, "Contact Name", "name");
+        form.relationshipField = createEditText(context, "Relationship (e.g., Friend, Family)", "relationship");
+        form.phoneField = createEditText(context, "Phone Number", "phone");
+        form.phoneField.setInputType(InputType.TYPE_CLASS_PHONE);
+
+        // Add upload button for contact photos/vCards
+        form.uploadButton = new Button(context);
+        form.uploadButton.setText("Upload Photo/Contact File (Optional)");
+
+        form.layout.addView(form.nameField);
+        form.layout.addView(form.relationshipField);
+        form.layout.addView(form.phoneField);
+        form.layout.addView(form.uploadButton);
+
+        return form;
+    }
+
+    public static LocationForm createLocationFormWithUpload(Context context)
+    {
+        LocationForm form = new LocationForm();
+        form.layout = createBaseLayout(context);
+
+        form.nameField = createEditText(context, "Location Name", "name");
+        form.addressField = createEditText(context, "Address", "address");
+        form.notesField = createEditText(context, "Notes (optional)", "notes");
+
+        // Add upload button for location photos/maps
+        form.uploadButton = new Button(context);
+        form.uploadButton.setText("Upload Photo/Map (Optional)");
+
+        form.layout.addView(form.nameField);
+        form.layout.addView(form.addressField);
+        form.layout.addView(form.notesField);
+        form.layout.addView(form.uploadButton);
+
+        return form;
+    }
+
+    public static MedicationForm createMedicationFormWithUpload(Context context)
+    {
+        MedicationForm form = new MedicationForm();
+        form.layout = createBaseLayout(context);
+
+        form.nameField = createEditText(context, "Medication Name", "name");
+        form.dosageField = createEditText(context, "Dosage (e.g., 10mg)", "dosage");
+        form.frequencyField = createEditText(context, "Frequency (e.g., Twice daily)", "frequency");
+        form.prescribedByField = createEditText(context, "Prescribed by", "prescribed_by");
+        form.notesField = createEditText(context, "Notes (optional)", "notes");
+
+        // Upload button already exists in original - just ensure it's added
+        form.uploadButton = new Button(context);
+        form.uploadButton.setText("Upload Prescription/Photo (Optional)");
+
+        form.layout.addView(form.nameField);
+        form.layout.addView(form.dosageField);
+        form.layout.addView(form.frequencyField);
+        form.layout.addView(form.prescribedByField);
+        form.layout.addView(form.notesField);
+        form.layout.addView(form.uploadButton);
+
+        return form;
     }
 }

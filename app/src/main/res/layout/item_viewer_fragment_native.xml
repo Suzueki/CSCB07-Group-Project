@@ -20,14 +20,14 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <!-- Dynamic Fields Container -->
+        <!-- Dynamic field containers -->
         <LinearLayout
             android:id="@+id/fieldsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
 
-        <!-- File Section (for documents only) -->
+        <!-- File section (for docs) -->
         <LinearLayout
             android:id="@+id/fileSection"
             android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="📄 Document File (PDF or Image)"
+                android:text="Document File (PDF or Image)"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -55,7 +55,7 @@
                 android:text="No file selected"
                 android:textSize="14sp" />
 
-            <!-- Document Viewer Container -->
+            <!-- Document viewer container -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
@@ -63,7 +63,7 @@
                 android:background="#FFFFFF"
                 android:elevation="2dp">
 
-                <!-- Native Image Viewer -->
+                <!-- Native image Viewer -->
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
@@ -94,34 +94,22 @@
 
             </FrameLayout>
 
-            <!-- Download Controls Section -->
+            <!-- Download section -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="📥 File Actions"
+                android:text="File Actions"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="#666666" />
 
-            <!-- Main Action Buttons Row 1 -->
+            <!-- Buttons-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/downloadButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="#4CAF50"
-                    android:enabled="false"
-                    android:text="📥 Download"
-                    android:textColor="@android:color/white"
-                    android:textSize="12sp" />
 
                 <Button
                     android:id="@+id/openExternalButton"
@@ -130,8 +118,8 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_weight="1"
-                    android:backgroundTint="#9C27B0"
-                    android:text="📱 Open App"
+                    android:backgroundTint="#F25022"
+                    android:text="Open App"
                     android:textColor="@android:color/white"
                     android:textSize="12sp"
                     android:visibility="gone" />
@@ -142,8 +130,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_weight="1"
-                    android:backgroundTint="#FF9800"
-                    android:text="📎 Select New"
+                    android:backgroundTint="#7FBA00"
+                    android:text="Select New"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
 
@@ -161,18 +149,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:layout_weight="1"
-                    android:backgroundTint="#2196F3"
-                    android:text="📋 Copy Share Link"
+                    android:backgroundTint="#FFB900"
+                    android:text="Copy Share Link"
                     android:textColor="@android:color/white"
                     android:textSize="12sp"
                     android:visibility="gone" />
 
-                <!-- Spacer for consistent layout -->
-                <View
+                <Button
+                    android:id="@+id/downloadButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
                     android:layout_weight="1"
-                    android:visibility="invisible" />
+                    android:backgroundTint="#00A4EF"
+                    android:enabled="false"
+                    android:text="Download"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+
 
             </LinearLayout>
 
@@ -183,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="📥 File options will appear when loaded"
+                android:text="File options will appear when loaded"
                 android:textColor="#999999"
                 android:textSize="12sp"
                 android:visibility="gone" />
@@ -204,7 +198,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:backgroundTint="#FF9800"
-                android:text="💾 Update"
+                android:text="Update"
                 android:textColor="@android:color/white" />
 
             <Button
@@ -213,8 +207,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:backgroundTint="#757575"
-                android:text="⬅️ Back"
+                android:backgroundTint="#6854A4"
+                android:text="Back"
                 android:textColor="@android:color/white" />
 
         </LinearLayout>
