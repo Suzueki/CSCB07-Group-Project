@@ -4,20 +4,20 @@ import java.util.ArrayList;
 
 public class Question {
     private String question;
-    private ArrayList<Answer> answers;
+    private ArrayList<Choice> choices;
 
     public Question() {};
 
-    public Question(String question, ArrayList<Answer> answers) {
+    public Question(String question, ArrayList<Choice> choices) {
         this.question = question;
-        this.answers = answers;
+        this.choices = choices;
     }
 
     public String getQuestionText() {
         return question;
     }
 
-    public ArrayList<Answer> getAnswers() {
-        return answers;
+    public ArrayList<Choice> getAnswers() {
+        return choices;
     }
 }

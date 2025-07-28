@@ -1,10 +1,10 @@
 package com.b07group32.relationsafe;
 
-public class ShortAnswer extends Answer implements Respondable{
+public class FreeFormChoice extends Choice implements Respondable{
 
     private String response;
 
-    public ShortAnswer(String label) {
+    public FreeFormChoice(String label) {
         super(label);
     }
 

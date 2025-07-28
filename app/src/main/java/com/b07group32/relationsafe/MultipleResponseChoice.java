@@ -1,9 +1,9 @@
 package com.b07group32.relationsafe;
 
-public class MultipleChoiceResponseAnswer extends MultipleChoiceAnswer implements Respondable{
+public class MultipleResponseChoice extends MultipleChoice implements Respondable{
 
     private String response;
-    public MultipleChoiceResponseAnswer(String label, String response) {
+    public MultipleResponseChoice(String label, String response) {
         super(label);
         this.response = response;
     }
