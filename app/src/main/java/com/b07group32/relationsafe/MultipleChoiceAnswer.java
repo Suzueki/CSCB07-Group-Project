@@ -5,4 +5,8 @@ public class MultipleChoiceAnswer extends Answer{
         super(label);
     };
 
+    public String getResponse() {
+        return label;
+    }
+
 }
