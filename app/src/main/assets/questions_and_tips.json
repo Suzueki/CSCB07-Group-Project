@@ -2,59 +2,69 @@
 	"warm_up": [
 		{
 			"id": "w1",
-			"type": "multiple_choice",
 			"question": "Which best describes your situation?",
 			"choices": [
 				{
+					"type": "multiple_choice",
 					"choice": "Still in a relationship"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "Planning to leave"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "Post-separation"
 				}
 			]
 		},
 		{
 			"id": "w2",
-			"type": "dropdown",
 			"question": "What city do you live in?",
-			"choices": []
+			"choices": [
+				{ "type": "dropdown" }
+			]
 		},
 		{
 			"id": "w3",
 			"type": "freeform",
-			"question": "Which room in your home feels the safest if you need to get away quickly?"
+			"question": "Which room in your home feels the safest if you need to get away quickly?",
+			"choices": [
+				{ "type":  "dropdown" }
+			]
 		},
 		{
 			"id": "w4",
-			"type": "multiple_choice",
 			"question": "Who do you live with?",
 			"choices": [
 				{
+					"type": "multiple_choice",
 					"choice": "Family"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "Roommates"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "Alone"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "Partner"
 				}
 			]
 		},
 		{
 			"id": "w5",
-			"type": "multiple_choice",
 			"question": "Do you have children?",
 			"choices": [
 				{
+					"type": "multiple_choice",
 					"choice": "No"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "Yes",
 					"requires_input": true,
 					"hint": "Enter a code word"
@@ -65,77 +75,88 @@
 	"still_in_relationship": [
 		{
 			"id": "sr1",
-			"type": "multiple_select",
 			"question": "Which form(s) of abuse are you experiencing?",
 			"choices": [
 				{
+					"type": "multiple_choice",
 					"choice": "Physical"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "Emotional"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "Financial"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "Other"
 				}
 			]
 		},
 		{
 			"id": "sr2",
-			"type": "multiple_choice",
 			"question": "Are you recording the incidents (dates, times, details)?",
 			"choices": [
 				{
+					"type": "multiple_choice",
 					"choice": "Yes"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "No"
 				}
 			]
 		},
 		{
 			"id": "sr3",
-			"type": "freeform",
-			"question": "Name one person you can call immediately in an emergency."
+			"question": "Name one person you can call immediately in an emergency.",
+			"choices": [
+				{ "type":  "freeform" }
+			]
 		}
 	],
 	"planning_to_leave": [
 		{
 			"id": "pl1",
-			"type": "date",
-			"question": "When do you plan to leave?"
+			"question": "When do you plan to leave?",
+			"choices": [
+				{ "type":  "date" }
+			]
 		},
 		{
 			"id": "pl2",
-			"type": "multiple_choice",
-			"question": "Do you have a go-bag packed with essentials?",
+=			"question": "Do you have a go-bag packed with essentials?",
 			"choices": [
 				{
+					"type": "multiple_choice",
 					"choice": "Yes"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "No"
 				}
 			]
 		},
 		{
 			"id": "pl3",
-			"type": "freeform",
-			"question": "Where do you keep your emergency cash or cards?"
+			"question": "Where do you keep your emergency cash or cards?",
+			"choices": [
+				{ "type":  "freeform" }
+			]
 		},
 		{
 			"id": "pl4",
-			"type": "multiple_choice",
 			"question": "Have you identified a safe place to stay?",
 			"choices": [
 				{
+					"type": "multiple_response_choice",
 					"choice": "Yes",
-					"requires_input": true,
 					"hint": "Enter a temporary shelter"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "No"
 				}
 			]
@@ -144,43 +165,44 @@
 	"post_separation": [
 		{
 			"id": "ps1",
-			"type": "multiple_choice",
 			"question": "Has the abuser continued any contact?",
 			"choices": [
 				{
+					"type": "multiple_choice",
 					"choice": "Yes"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "No"
 				}
 			]
 		},
 		{
 			"id": "ps2",
-			"type": "multiple_choice",
 			"question": "Do you have a protection order? If yes, which type?",
 			"choices": [
 				{
+					"type": "multiple_response_choice",
 					"choice": "Yes",
-					"requires_input": true,
 					"hint": "Enter a temporary shelter"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "No"
 				}
 			]
 		},
 		{
 			"id": "ps3",
-			"type": "multiple_choice",
 			"question": "Are you using any safety tools (cameras, door alarms)?",
 			"choices": [
 				{
+					"type": "multiple_response_choice",
 					"choice": "Yes",
-					"requires_input": true,
 					"hint": "Enter an equipment"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "No"
 				}
 			]
@@ -189,19 +211,22 @@
 	"follow_up": [
 		{
 			"id": "f1",
-			"type": "multiple_choice",
 			"question": "Which type of support would help you most right now?",
 			"choices": [
 				{
+					"type": "multiple_choice",
 					"choice": "Counselling"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "Legal aid"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "Financial guidance"
 				},
 				{
+					"type": "multiple_choice",
 					"choice": "Co-parenting resources"
 				}
 			]
