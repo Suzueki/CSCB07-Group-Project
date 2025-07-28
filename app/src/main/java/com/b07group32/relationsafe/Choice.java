@@ -1,13 +1,13 @@
 package com.b07group32.relationsafe;
 
 public abstract class Choice {
-    protected String label;
+    protected String choice;
 
-    public Choice(String label) {
-        this.label = label;
+    public Choice(String choice) {
+        this.choice = choice;
     }
 
     public String getResponse() {
-        return this.label;
+        return this.choice;
     }
 }
