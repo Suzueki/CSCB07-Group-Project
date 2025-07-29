@@ -1,17 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_corner"
+    android:backgroundTint="@color/gray"
+    android:padding="16dp"
     xmlns:tools="http://schemas.android.com/tools">
     <TextView
+        android:id="@+id/tipContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_corner"
-        android:backgroundTint="@color/gray"
         tools:text="placeholder tip"
-        android:padding="16dp"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:layout_margin="8dp"/>
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/editButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit"
+            android:background="@drawable/rounded_corner"
+            android:backgroundTint="@color/blue"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>
