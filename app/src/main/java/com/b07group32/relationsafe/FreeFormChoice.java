@@ -4,15 +4,13 @@ public class FreeFormChoice extends Choice implements Respondable{
 
     private String response;
 
-    public FreeFormChoice(String label) {
-        super(label);
+    public FreeFormChoice(String hint) {
+        super(hint);
     }
 
-    public String getResponse() {
-        return response;
-    }
+    public String getResponse() { return response; }
     @Override
-    public void setResponse(String response) {
-        this.response = response;
-    }
+    public void setResponse(String response) { this.response = response; }
+    @Override
+    public String getHint() { return choice; } // use choice as hint
 }

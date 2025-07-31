@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Question {
     private String question;
+    private String id;
     private ArrayList<Choice> choices;
 
     public Question() {};
@@ -17,7 +18,11 @@ public class Question {
         return question;
     }
 
-    public ArrayList<Choice> getAnswers() {
+    public ArrayList<Choice> getChoices() {
         return choices;
+    }
+
+    public String getQuestionId() {
+        return id;
     }
 }

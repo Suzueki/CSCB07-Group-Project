@@ -3,9 +3,10 @@ package com.b07group32.relationsafe;
 public class MultipleResponseChoice extends MultipleChoice implements Respondable{
 
     private String response;
-    public MultipleResponseChoice(String label, String response) {
-        super(label);
-        this.response = response;
+    private String hint;
+    public MultipleResponseChoice(String choice, String hint) {
+        super(choice);
+        this.hint = hint;
     }
 
     @Override
@@ -17,4 +18,6 @@ public class MultipleResponseChoice extends MultipleChoice implements Respondabl
     public String getResponse() {
         return response;
     }
+    @Override
+    public String getHint() { return hint; }
 }

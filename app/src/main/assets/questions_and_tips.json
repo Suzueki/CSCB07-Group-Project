@@ -27,10 +27,9 @@
 		},
 		{
 			"id": "w3",
-			"type": "freeform",
 			"question": "Which room in your home feels the safest if you need to get away quickly?",
 			"choices": [
-				{ "type":  "dropdown" }
+				{ "type":  "freeform" }
 			]
 		},
 		{
@@ -64,9 +63,8 @@
 					"choice": "No"
 				},
 				{
-					"type": "multiple_choice",
+					"type": "multiple_response_choice",
 					"choice": "Yes",
-					"requires_input": true,
 					"hint": "Enter a code word"
 				}
 			]

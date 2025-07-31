@@ -16,7 +16,9 @@ public class QuestionLoader {
                             .of(Choice.class, "type")
                             .registerSubtype(MultipleChoice.class, "multiple_choice")
                             .registerSubtype(MultipleResponseChoice.class, "multiple_response_choice")
-                            .registerSubtype(FreeFormChoice.class, "freeform"))
+                            .registerSubtype(FreeFormChoice.class, "freeform")
+                            .registerSubtype(DropdownChoice.class, "dropdown")
+                            .registerSubtype(DateChoice.class, "date"))
             .create();
 
     public static Form loadQuestions(Context context, String filename) {
