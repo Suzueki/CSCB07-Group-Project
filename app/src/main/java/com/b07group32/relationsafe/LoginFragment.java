@@ -326,7 +326,8 @@ public class LoginFragment extends Fragment {
         return sharedPreferences.getString(USER_PASSWORD_KEY, null);
     }
 
-    private void showPinSetupDialog() {
+    private void showPinSetupDialog()
+    {
         // creates dialog for PIN setup
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
         builder.setTitle("Set Up PIN");
