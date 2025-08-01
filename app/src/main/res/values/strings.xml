@@ -12,6 +12,9 @@
     <string name="spinner">Spinner</string>
     <string name="manage_items">Manage Items</string>
     <string name="fab_exit_name">Go to Google</string>
+    <string name="home">Home</string>
+    <string name="documents">Documents</string>
+    <string name="settings">Settings</string>
 
     <string-array name="categories_array">
         <item>Select Category</item>
