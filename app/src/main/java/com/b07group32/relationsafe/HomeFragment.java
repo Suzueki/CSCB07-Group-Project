@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeFragment extends Fragment {
     @Nullable
@@ -18,6 +21,7 @@ public class HomeFragment extends Fragment {
 
         Button buttonRecyclerView = view.findViewById(R.id.buttonRecyclerView);
         Button buttonScroller = view.findViewById(R.id.buttonScroller);
+        Button buttonEmergencyInfoStorage = view.findViewById(R.id.buttonEmergencyStorage);
         Button buttonSpinner = view.findViewById(R.id.buttonSpinner);
         Button buttonManageItems = view.findViewById(R.id.buttonManageItems);
         Button buttonQuestionaire = view.findViewById(R.id.buttonQuestionaire);
@@ -26,6 +30,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 loadFragment(new RecyclerViewFragment());
+            }
+        });
+
+        buttonEmergencyInfoStorage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment(new EmergencyInfoStorageFragment());
             }
         });
 
