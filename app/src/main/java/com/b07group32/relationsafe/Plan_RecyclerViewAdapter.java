@@ -53,11 +53,11 @@ public class Plan_RecyclerViewAdapter extends RecyclerView.Adapter<Plan_Recycler
                     } else {
                         mode = "edit";
                     }
-                    Fragment fragment = QuestionnaireFragment.newInstance(mode, qid);
-                    FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_container, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+//                    Fragment fragment = QuestionnaireFragment.newInstance(mode, qid);
+//                    FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+//                    fragmentTransaction.replace(R.id.fragment_container, fragment);
+//                    fragmentTransaction.addToBackStack(null);
+//                    fragmentTransaction.commit();
                 }
             }
         });
