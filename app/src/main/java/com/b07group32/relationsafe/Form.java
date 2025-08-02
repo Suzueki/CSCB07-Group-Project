@@ -8,5 +8,5 @@ public class Form {
     ArrayList<Question> planning_to_leave;
     ArrayList<Question> post_separation;
     ArrayList<Question> follow_up;
-    ArrayList<String> tips;
+    ArrayList<TipContainer> tips;
 }

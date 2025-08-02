@@ -211,7 +211,7 @@ public class QuestionnaireFragment extends Fragment {
         return questions;
     }
     private void loadAllQuestions() {
-        Form form = QuestionLoader.loadQuestions(getContext(), "test_questions_and_tips.json");
+        Form form = QuestionLoader.loadQuestions(getContext(), "questions_and_tips.json");
         if (form == null || form.warm_up == null) {
             return;
         }
@@ -318,7 +318,6 @@ public class QuestionnaireFragment extends Fragment {
             nextQuestionList = null;
             questionIndex = 0;
         }
-        Toast.makeText(getContext(), Integer.toString(questionIndex), Toast.LENGTH_SHORT).show();
         setQuestionView(questionIndex, questionList);
     }
 
