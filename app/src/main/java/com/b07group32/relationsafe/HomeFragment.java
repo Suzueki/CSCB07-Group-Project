@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -19,46 +20,22 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_home_fragment, container, false);
 
-        Button buttonRecyclerView = view.findViewById(R.id.buttonRecyclerView);
-        Button buttonScroller = view.findViewById(R.id.buttonScroller);
-        Button buttonEmergencyInfoStorage = view.findViewById(R.id.buttonEmergencyStorage);
-        Button buttonSpinner = view.findViewById(R.id.buttonSpinner);
-        Button buttonManageItems = view.findViewById(R.id.buttonManageItems);
-        Button buttonQuestionaire = view.findViewById(R.id.buttonQuestionaire);
+        CardView buttonQuestionnaire = view.findViewById(R.id.buttonQuestionnaire);
 
-        buttonRecyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadFragment(new RecyclerViewFragment());
-            }
-        });
-
-        buttonEmergencyInfoStorage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadFragment(new EmergencyInfoStorageFragment());
-            }
-        });
-
-        buttonScroller.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadFragment(new ScrollerFragment());
-            }
-        });
-
-        buttonSpinner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadFragment(new SpinnerFragment());
-            }
-        });
-
-
-        buttonQuestionaire.setOnClickListener(new View.OnClickListener() {
+        buttonQuestionnaire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { loadFragment(new QuestionnaireFragment());}
         });
+
+        // TODO: move to settings
+//        Button buttonEmergencyInfoStorage = view.findViewById(R.id.buttonEmergencyStorage);
+//        buttonEmergencyInfoStorage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                loadFragment(new EmergencyInfoStorageFragment());
+//            }
+//        });
+
 
         return view;
     }
