@@ -11,6 +11,9 @@ constraintlayout = "2.1.4"
 googleGmsGoogleServices = "4.4.2"
 firebaseDatabase = "21.0.0"
 firebaseAuth = "24.0.0"
+firebaseStorage = "22.0.0"
+monitor = "1.8.0"
+
 
 [libraries]
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
@@ -23,6 +26,9 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
