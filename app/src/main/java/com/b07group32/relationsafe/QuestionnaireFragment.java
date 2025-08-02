@@ -85,9 +85,11 @@ public class QuestionnaireFragment extends Fragment {
         buttonBack = view.findViewById(R.id.buttonBack);
         buttonNext = view.findViewById(R.id.buttonNext);
         buttonSubmit = view.findViewById(R.id.buttonSubmit);
+
         // TODO: set button's text differently for editing question response
         buttonBack.setText(R.string.string_back);
         buttonNext.setText(R.string.string_next);
+        buttonSubmit.setText(R.string.string_submit);
 
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +138,7 @@ public class QuestionnaireFragment extends Fragment {
         }
 
         // TK: temporary
-        questionRoute = planningToLeaveQuestions;
+        questionRoute = stillInRelationshipQuestions;
 
         return view;
     }
@@ -149,9 +151,16 @@ public class QuestionnaireFragment extends Fragment {
         }
         if (questionIndex == questionList.size() - 1 && nextQuestionList == null) {
             buttonNext.setVisibility(View.GONE);
+            buttonSubmit.setVisibility(View.VISIBLE);
+
         } else {
             buttonNext.setVisibility(View.VISIBLE);
+            buttonSubmit.setVisibility(View.GONE);
         }
+    }
+
+    private void getResponse() {
+
     }
 
     private List<Question> sortQuestionsById(List<Question> questions) {
@@ -176,13 +185,17 @@ public class QuestionnaireFragment extends Fragment {
         questionContent.setText(question.getQuestionText());
         questionNumber.setText("Question " + (index + 1) + "/" + questions.size());
 
-        // Reset choices
-        // choiceGroup.clearCheck();
-        shortResponse.setText("");
-
         List<Choice> choices = question.getChoices();
         RadioButton[] buttons = {choice1, choice2, choice3, choice4};
         CheckBox[] checkBoxes = {checkbox1, checkbox2, checkbox3, checkbox4};
+
+        // Reset choices
+        for (CheckBox checkbox : checkBoxes) {
+            checkbox.setChecked(false);
+        }
+        choiceGroup.clearCheck();
+        shortResponse.setText("");
+
 
         // Set all to default invisible
         checkboxGroup.setVisibility(View.GONE);

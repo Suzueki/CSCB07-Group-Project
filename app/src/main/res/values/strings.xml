@@ -14,6 +14,7 @@
     <string name="freetext_hint">Enter your response</string>
     <string name="string_back">Back</string>
     <string name="string_next">Next</string>
+    <string name="string_submit">Submit</string>
 
     <string-array name="categories_array">
         <item>Books</item>
