@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="Emergency Information Storage"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Documents Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Documents"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/buttonAddDocument"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="+ Add"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/buttonViewDocument"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#2196F3"
+                    android:enabled="false"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="View"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/buttonDeleteDocument"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#E57373"
+                    android:enabled="false"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="Delete"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/documentsListView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#F5F5F5"
+                android:nestedScrollingEnabled="true" />
+
+        </LinearLayout>
+
+        <!-- Emergency Contacts Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Emergency Contacts"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/buttonAddContact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="+ Add"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/buttonViewContact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#2196F3"
+                    android:enabled="false"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="View"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/buttonDeleteContact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#E57373"
+                    android:enabled="false"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="Delete"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/contactsListView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#F5F5F5"
+                android:nestedScrollingEnabled="true" />
+
+        </LinearLayout>
+
+        <!-- Safe Locations Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Safe Locations"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/buttonAddLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="+ Add"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/buttonViewLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#2196F3"
+                    android:enabled="false"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="View"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/buttonDeleteLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#E57373"
+                    android:enabled="false"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="Delete"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/locationsListView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#F5F5F5"
+                android:nestedScrollingEnabled="true" />
+
+        </LinearLayout>
+
+        <!-- Medications Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Medications"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/buttonAddMedication"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="+ Add"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/buttonViewMedication"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#2196F3"
+                    android:enabled="false"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="View"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/buttonDeleteMedication"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#E57373"
+                    android:enabled="false"
+                    android:minHeight="0dp"
+                    android:padding="8dp"
+                    android:text="Delete"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/medicationsListView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#F5F5F5"
+                android:nestedScrollingEnabled="true" />
+
+        </LinearLayout>
+
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Back" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
