@@ -6,8 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
+import android.app.Activity;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -29,17 +32,35 @@ public class Plan_RecyclerViewAdapter extends RecyclerView.Adapter<Plan_Recycler
         return new Plan_RecyclerViewAdapter.MyViewHolder(view);
     }
 
-    public void editResponse(String qid) {
-
-    }
-
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
        String tip = plan.get(position).getTip();
        String answer = plan.get(position).getAnswer().trim();
+       String sub = plan.get(position).getSub().trim();
+       String text = tip.replace("{answer}", answer);
+       text = tip.replace("{sub}", sub);
 
-       holder.tvTip.setText(tip.replace("{answer}", answer));
-       holder.editBtn.setOnClickListener(v -> editResponse(plan.get(position).getQid()));
+       holder.tvTip.setText(text);
+       holder.editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pos = holder.getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION) {
+                    String qid = plan.get(pos).getQid();
+                    String mode;
+                    if (qid.equals("w1")) {
+                        mode = "change branch";
+                    } else {
+                        mode = "edit";
+                    }
+                    Fragment fragment = QuestionnaireFragment.newInstance(mode, qid);
+                    FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            }
+        });
     }
 
     @Override
