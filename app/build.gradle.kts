@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.storage)
+    implementation(libs.monitor)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
