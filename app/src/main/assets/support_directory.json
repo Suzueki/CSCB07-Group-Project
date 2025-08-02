@@ -1,0 +1,44 @@
+{
+  "Toronto": {
+    "Emergency Hotlines": [
+      {
+        "name": "A",
+        "phone": "911",
+        "description": "A",
+        "website": "https://github.com/Suzueki/CSCB07-Group-Project/commits/main/"
+      }
+    ],
+    "Shelters & Housing": [
+      {
+        "name": "A",
+        "phone": "1111111111",
+        "description": "A",
+        "website": "https://github.com/Suzueki/CSCB07-Group-Project/commits/main/"
+      }
+    ],
+    "Legal Assistance": [
+      {
+        "name": "A",
+        "phone": "1111111111",
+        "description": "A",
+        "website": "https://github.com/Suzueki/CSCB07-Group-Project/commits/main/"
+      }
+    ],
+    "Non-emergency Services": [
+      {
+        "name": "A",
+        "phone": "1111111111",
+        "description": "A",
+        "website": "https://github.com/Suzueki/CSCB07-Group-Project/commits/main/"
+      }
+    ],
+    "Additional Help": [
+      {
+        "name": "A",
+        "phone": "1111111111",
+        "description": "A",
+        "website": "https://github.com/Suzueki/CSCB07-Group-Project/commits/main/"
+      }
+    ]
+  }
+}

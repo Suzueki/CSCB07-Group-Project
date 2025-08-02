@@ -24,7 +24,8 @@ public class HomeFragment extends Fragment {
         Button buttonEmergencyInfoStorage = view.findViewById(R.id.buttonEmergencyStorage);
         Button buttonSpinner = view.findViewById(R.id.buttonSpinner);
         Button buttonManageItems = view.findViewById(R.id.buttonManageItems);
-        Button buttonQuestionaire = view.findViewById(R.id.buttonQuestionaire);
+        Button buttonQuestionnaire = view.findViewById(R.id.buttonQuestionnaire);
+        Button buttonSupportConnection = view.findViewById(R.id.buttonSupportConnection);
 
         buttonRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,9 +56,14 @@ public class HomeFragment extends Fragment {
         });
 
 
-        buttonQuestionaire.setOnClickListener(new View.OnClickListener() {
+        buttonQuestionnaire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { loadFragment(new QuestionnaireFragment());}
+        });
+
+        buttonSupportConnection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { loadFragment(new SupportConnectionFragment());}
         });
 
         return view;

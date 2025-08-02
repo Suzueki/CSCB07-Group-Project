@@ -59,7 +59,7 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <Button
-        android:id="@+id/buttonQuestionaire"
+        android:id="@+id/buttonQuestionnaire"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/questionaire"
@@ -67,5 +67,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonScroller" />
+
+    <Button
+        android:id="@+id/buttonSupportConnection"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Support Connection"
+        app:layout_constraintBottom_toTopOf="@+id/buttonQuestionnaire"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSpinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
