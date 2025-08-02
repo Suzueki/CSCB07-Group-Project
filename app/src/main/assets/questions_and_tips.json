@@ -235,95 +235,95 @@
 		{
 			"qid": "w1",
 			"tips": [
-				{"response": "Still in a relationship", "tip": "Keep this plan updated, and remember you can always reach out if things escalate."},
-				{"response": "Planning to leave", "tip": "Start packing small items now so you’re ready when you decide to leave."},
-				{"response": "Post-separation", "tip": "It’s normal to feel unsettled, refer back to this plan whenever you need a safety reminder."}
+				{"response": "Still in a relationship", "tip": "Keep this plan updated, and remember you can always reach out if things escalate.", "ref":  ""},
+				{"response": "Planning to leave", "tip": "Start packing small items now so you’re ready when you decide to leave.", "ref":  ""},
+				{"response": "Post-separation", "tip": "It’s normal to feel unsettled, refer back to this plan whenever you need a safety reminder.", "ref":  ""}
 			]
 		},
 		{
 			"qid": "w2",
-			"tips": [{"tip": "Save the local support numbers for {answer} in your phone’s speed-dial so you can call immediately if you need help."}]
+			"tips": [{"tip": "Save the local support numbers for {answer} in your phone’s speed-dial so you can call immediately if you need help.", "ref":  ""}]
 		},
 		{
 			"qid": "w3",
-			"tips": [{"tip": "Keep your essentials (phone, keys, and a small flashlight) in {answer} so you can grab them instantly when you need to leave."}]
+			"tips": [{"tip": "Keep your essentials (phone, keys, and a small flashlight) in {answer} so you can grab them instantly when you need to leave.", "ref":  ""}]
 		},
 		{
 			"qid": "w4",
 			"tips": [
-				{"response": "Family", "tip": "Let those you live with: family know your safe room and cue‐word so they can support you in an emergency."},
-				{"response": "Alone", "tip": "Since you live alone, identify a trusted neighbor or friend and share your safe room location with them."},
-				{"response": "Partner", "tip": "Because you live with your partner, keep your safety plan hidden (in {safe_room}), and consider storing a digital copy in a password-protected note they won’t see."}
+				{"response": "Family", "tip": "Let those you live with: family know your safe room and cue‐word so they can support you in an emergency.", "ref":  ""},
+				{"response": "Alone", "tip": "Since you live alone, identify a trusted neighbor or friend and share your safe room location with them.", "ref":  ""},
+				{"response": "Partner", "tip": "Because you live with your partner, keep your safety plan hidden (in {sub}), and consider storing a digital copy in a password-protected note they won’t see.", "ref":  "w3"}
 			]
 		},
 		{
 			"qid": "w5",
 			"tips": [
-				{"response": "Yes", "tip": "Practice your safety plan with your children so that when they hear {answer}, they know exactly what to do."},
-				{"response": "No", "tip": "Even without children, it helps to identify a second safe space in your home."}
+				{"response": "Yes", "tip": "Practice your safety plan with your children so that when they hear {answer}, they know exactly what to do.", "ref":  ""},
+				{"response": "No", "tip": "Even without children, it helps to identify a second safe space in your home.", "ref":  ""}
 			]
 		},
 		{
 			"qid": "sr1",
-			"tips": [{"tip": "If you face {answer} abuse, remember you don't have to face it alone. Reach out to your emergency contact right away."}]
+			"tips": [{"tip": "If you face {answer} abuse, remember you don't have to face it alone. Reach out to your emergency contact right away.", "ref":  ""}]
 		},
 		{
 			"qid": "sr2",
 			"tips": [
-				{"response": "Yes", "tip": "Log each incident (date, time, and a brief note) so you have clear records if needed later."},
-				{"response": "No", "tip": "Even brief notes on your phone can be helpful. Start logging today."}
+				{"response": "Yes", "tip": "Log each incident (date, time, and a brief note) so you have clear records if needed later.", "ref":  ""},
+				{"response": "No", "tip": "Even brief notes on your phone can be helpful. Start logging today.", "ref":  ""}
 			]
 		},
 		{
 			"qid": "sr3",
-			"tips": [{"tip": "Save {answer} in your phone under a code-word so you can quietly call them when you need help."}]
+			"tips": [{"tip": "Save {answer} in your phone under a code-word so you can quietly call them when you need help.", "ref":  ""}]
 		},
 		{
 			"qid": "pl1",
-			"tips": [{"tip": "Set a real target {answer} and pack one essential item each day until you’re ready."}]
+			"tips": [{"tip": "Set a real target {answer} and pack one essential item each day until you’re ready.", "ref":  ""}]
 		},
 		{
 			"qid": "pl2",
 			"tips": [
-				{"response": "Yes", "tip": "Great! Keep your go-bag in a hidden spot so you can grab it quickly."},
-				{"response": "No", "tip": "Pack a simple go-bag today with essentials like your ID, some cash, and a charger."}
+				{"response": "Yes", "tip": "Great! Keep your go-bag in a hidden spot so you can grab it quickly.", "ref":  ""},
+				{"response": "No", "tip": "Pack a simple go-bag today with essentials like your ID, some cash, and a charger.", "ref":  ""}
 			] 
 		},
 		{
 			"qid": "pl3",
-			"tips": [{"tip": "Stash some cash and a spare card in {answer}, a spot your partner won’t suspect."}]
+			"tips": [{"tip": "Stash some cash and a spare card in {answer}, a spot your partner won’t suspect.", "ref":  ""}]
 		},
 		{
 			"qid": "pl4",
 			"tips": [
-				{"response": "Yes", "tip": "Make sure {answer} knows you may arrive unexpectedly and how to contact you."},
-				{"response": "No", "tip": "Reach out to Victim Services Toronto or a trusted friend now to secure a shelter option before you leave."}
+				{"response": "Yes", "tip": "Make sure {answer} knows you may arrive unexpectedly and how to contact you.", "ref":  ""},
+				{"response": "No", "tip": "Reach out to Victim Services Toronto or a trusted friend now to secure a shelter option before you leave.", "ref":  ""}
 			]
 		},
 		{
 			"qid": "ps1",
 			"tips": [
-				{"response": "Yes", "tip": "Since you’ve heard from them, stay vigilant and keep your protection order handy if you have one."},
-				{"response": "No", "tip": "Even without contact, keep your doors locked and your phone on in case you need to call 911."}
+				{"response": "Yes", "tip": "Since you’ve heard from them, stay vigilant and keep your protection order handy if you have one.", "ref":  ""},
+				{"response": "No", "tip": "Even without contact, keep your doors locked and your phone on in case you need to call 911.", "ref":  ""}
 			]
 		},
 		{
 			"qid": "ps2",
 			"tips": [
-				{"response": "Yes", "tip": "Carry your {answer} at all times and share copies with anyone who needs to know."},
-				{"response": "No", "tip": "Consider applying for a protection order; it can help deter unwanted contact."}
+				{"response": "Yes", "tip": "Carry your {answer} at all times and share copies with anyone who needs to know.", "ref":  ""},
+				{"response": "No", "tip": "Consider applying for a protection order; it can help deter unwanted contact.", "ref":  ""}
 			]
 		},
 		{
 			"qid": "ps3",
 			"tips": [
-				{"response": "Yes", "tip": "Make sure your {answer} is in working order and placed where you’ll notice it."},
-				{"response": "No", "tip": "Consider installing a simple door alarm or camera to alert you to unexpected entry."}
+				{"response": "Yes", "tip": "Make sure your {answer} is in working order and placed where you’ll notice it.", "ref":  ""},
+				{"response": "No", "tip": "Consider installing a simple door alarm or camera to alert you to unexpected entry.", "ref":  ""}
 			]
 		},
 		{
 			"qid": "f1",
-			"tips": [{"tip": "Reach out to {answer} - they can offer the specialized help you need right now."}]
+			"tips": [{"tip": "Reach out to {answer} - they can offer the specialized help you need right now.", "ref":  ""}]
 		}
 	]
 }	
