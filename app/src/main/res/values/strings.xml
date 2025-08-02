@@ -14,6 +14,8 @@
     <string name="fab_exit_name">Go to Google</string>
     <string name="questionaire">Questionaire</string>
     <string name="freetext_hint">Enter your response</string>
+    <string name="string_back">Back</string>
+    <string name="string_next">Next</string>
     <string name="home">Home</string>
     <string name="documents">Documents</string>
     <string name="settings">Settings</string>
@@ -25,6 +27,80 @@
         <item>Safe Location</item>
         <item>Medication</item>
     </string-array>
-
+    <!-- Add more cities if needed -->
+    <string-array name="cities_array">
+        <item>Toronto</item>
+        <item>Montreal</item>
+        <item>Calgary</item>
+        <item>Ottawa</item>
+        <item>Edmonton</item>
+        <item>Winnipeg</item>
+        <item>Mississauga</item>
+        <item>Vancouver</item>
+        <item>Brampton</item>
+        <item>Hamilton</item>
+        <item>Surrey</item>
+        <item>Quebec City</item>
+        <item>Laval</item>
+        <item>London</item>
+        <item>Halifax</item>
+        <item>Markham</item>
+        <item>Vaughan</item>
+        <item>Gatineau</item>
+        <item>Saskatoon</item>
+        <item>Kitchener</item>
+        <item>Longueuil</item>
+        <item>Burnaby</item>
+        <item>Windsor</item>
+        <item>Regina</item>
+        <item>Oakville</item>
+        <item>Richmond</item>
+        <item>Richmond Hill</item>
+        <item>Burlington</item>
+        <item>Oshawa</item>
+        <item>Sherbrooke</item>
+        <item>Greater Sudbury</item>
+        <item>Abbotsford</item>
+        <item>Lévis</item>
+        <item>Coquitlam</item>
+        <item>Barrie</item>
+        <item>Saguenay</item>
+        <item>Kelowna</item>
+        <item>Guelph</item>
+        <item>Trois‑Rivières</item>
+        <item>Whitby</item>
+        <item>Cambridge</item>
+        <item>St.Catharines</item>
+        <item>Milton</item>
+        <item>Langley</item>
+        <item>Kingston</item>
+        <item>Ajax</item>
+        <item>Waterloo</item>
+        <item>Terrebonne</item>
+        <item>Saanich</item>
+        <item>St.John’s</item>
+        <item>Thunder Bay</item>
+        <item>Delta</item>
+        <item>Brantford</item>
+        <item>Chatham‑Kent</item>
+        <item>Clarington</item>
+        <item>Red Deer</item>
+        <item>Portage la Prairie</item>
+        <item>Selkirk</item>
+        <item>Steinbach</item>
+        <item>Thompson</item>
+        <item>Winkler</item>
+        <item>Bathurst</item>
+        <item>Campbellton</item>
+        <item>Dieppe</item>
+        <item>Edmundston</item>
+        <item>Fredericton</item>
+        <item>Miramichi</item>
+        <item>Moncton</item>
+        <item>Saint John</item>
+        <item>Corner Brook</item>
+        <item>Mount Pearl</item>
+        <item>Yellowknife</item>
+    </string-array>
 
 </resources>
