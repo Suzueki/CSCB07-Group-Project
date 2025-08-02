@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         // auth.signOut(); // maintain auth for debugging purpose
 
-        if (auth.getCurrentUser() != null) {
+        if (auth.getCurrentUser() == null) {
             loadFragment(new HomeFragment());
             bottomNavigationView.setVisibility(View.VISIBLE);
         } else {

@@ -5,6 +5,7 @@ import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -67,7 +69,6 @@ public class QuestionnaireFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_questionnaire, container, false);
-
         // Get views from the layout
         questionLayout = view.findViewById(R.id.questionLayout);
         questionContent = view.findViewById(R.id.questionContent);
@@ -190,13 +191,11 @@ public class QuestionnaireFragment extends Fragment {
     }
 
     private void showDatePickerDialog() { // Doesn't show spinners for some reason
-        final Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        Context context = new ContextThemeWrapper(getContext(), R.style.SpinnerDatePickerDialog);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(context,
-                R.style.SpinnerDatePickerDialog,
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
                 (view, selectedYear, selectedMonth, selectedDay) -> {
                     String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
                     date.setText(selectedDate);
@@ -204,6 +203,10 @@ public class QuestionnaireFragment extends Fragment {
         datePickerDialog.show();
     }
 
+    private void getDate(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+        String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+        date.setText(selectedDate);
+    }
 
     private List<Question> sortQuestionsById(List<Question> questions) {
         // Sort questions by ID
@@ -288,6 +291,7 @@ public class QuestionnaireFragment extends Fragment {
                     break;
                 case "date":
                     date.setText(choice.getChoice());
+                    date.setVisibility(View.VISIBLE);
                     selectDateButton.setVisibility(View.VISIBLE);
                     break;
             }

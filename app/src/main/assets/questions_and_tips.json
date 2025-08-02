@@ -120,7 +120,8 @@
 			"id": "pl1",
 			"question": "When do you plan to leave?",
 			"choices": [
-				{ "type":  "date" }
+				{ "type":  "date",
+				"choice": "Enter a date"}
 			]
 		},
 		{
