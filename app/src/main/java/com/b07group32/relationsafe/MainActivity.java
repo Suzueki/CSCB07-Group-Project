@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference myRef = db.getReference("testDemo");
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.signOut();
+        // auth.signOut(); // maintain auth for debugging purpose
 
         if (auth.getCurrentUser() != null) {
             loadFragment(new HomeFragment());
@@ -50,11 +50,8 @@ public class MainActivity extends AppCompatActivity {
             if(item.getItemId() == R.id.nav_home){
                 setCurrentFragment(new HomeFragment());
             }
-            if(item.getItemId() == R.id.nav_documents){
-                setCurrentFragment(new HomeFragment());
-            }
             if(item.getItemId() == R.id.nav_settings){
-                setCurrentFragment(new HomeFragment());
+                setCurrentFragment(new SettingsFragment());
             }
             return true;
         });
