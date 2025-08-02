@@ -40,15 +40,15 @@ public class PlanFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plan, container, false);
         RecyclerView rv = view.findViewById(R.id.planRecyclerView);
-        setUpPlan();
         Plan_RecyclerViewAdapter adapter = new Plan_RecyclerViewAdapter(requireContext(), plan);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                plan.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    // add to list
+                    // populate list later
                 }
                 adapter.notifyDataSetChanged();
 
@@ -60,27 +60,5 @@ public class PlanFragment extends Fragment {
             }
         });
         return view;
-    }
-
-    private void setUpPlan() {
-        ArrayList<HashMap<String, String>> tips = new ArrayList<>();
-
-        // sample data (actual data will be from database)
-        HashMap<String, String> t1 = new HashMap<>();
-        t1.put("qid", "sr3");
-        t1.put("tip", "Save {answer} in your phone under a code-word so you can quietly call them when you need help.");
-        t1.put("answer", "mother");
-
-        HashMap<String, String> t2 = new HashMap<>();
-        t2.put("qid", "sr2");
-        t2.put("tip", "Log each incident (date, time, and a brief note) so you have clear records if needed later.");
-
-        tips.add(t2);
-        tips.add(t1);
-
-        for (int i=0; i<tips.size(); i++) {
-            HashMap<String, String> tip = tips.get(i);
-            plan.add(new PlanModel(tip.get("qid"), tip.get("tip"), tip.getOrDefault("answer", "")));
-        }
     }
 }
