@@ -14,7 +14,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
-public class AlarmReciever extends BroadcastReceiver{
+public class AlarmReceiver extends BroadcastReceiver{
 
     private NotificationManager notifManager;
     private int NOTIFICATION_ID = 1;

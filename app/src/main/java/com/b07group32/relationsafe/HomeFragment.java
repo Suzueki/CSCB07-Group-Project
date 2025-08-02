@@ -54,10 +54,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        buttonManageItems.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { loadFragment(new ManageItemsFragment());}
-        });
 
         buttonQuestionaire.setOnClickListener(new View.OnClickListener() {
             @Override
