@@ -24,6 +24,8 @@
     <string name="plans_description">Explore various plans suited for your goals</string>
     <string name="support_center">Support Center</string>
     <string name="support_center_description">Get help and find answers to your questions</string>
+    <string name="schedule_reminders">Schedule Reminders</string>
+    <string name="welcome_back">Welcome back!</string>
 
     <string-array name="categories_array">
         <item>Select Category</item>
