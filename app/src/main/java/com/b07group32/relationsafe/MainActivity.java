@@ -50,11 +50,8 @@ public class MainActivity extends AppCompatActivity {
             if(item.getItemId() == R.id.nav_home){
                 setCurrentFragment(new HomeFragment());
             }
-            if(item.getItemId() == R.id.nav_documents){
-                setCurrentFragment(new HomeFragment());
-            }
             if(item.getItemId() == R.id.nav_settings){
-                setCurrentFragment(new HomeFragment());
+                setCurrentFragment(new SettingsFragment());
             }
             return true;
         });
