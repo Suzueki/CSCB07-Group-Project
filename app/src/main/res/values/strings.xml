@@ -12,13 +12,18 @@
     <string name="spinner">Spinner</string>
     <string name="manage_items">Manage Items</string>
     <string name="fab_exit_name">Go to Google</string>
-    <string name="questionaire">Questionaire</string>
     <string name="freetext_hint">Enter your response</string>
     <string name="string_back">Back</string>
     <string name="string_next">Next</string>
     <string name="home">Home</string>
     <string name="documents">Documents</string>
     <string name="settings">Settings</string>
+    <string name="questionnaire">Questionnaire</string>
+    <string name="questionnaire_description">Fill out a quick questionnaire to assess your needs</string>
+    <string name="plans">Plans</string>
+    <string name="plans_description">Explore various plans suited for your goals</string>
+    <string name="support_center">Support Center</string>
+    <string name="support_center_description">Get help and find answers to your questions</string>
 
     <string-array name="categories_array">
         <item>Select Category</item>
