@@ -32,7 +32,7 @@ public class PlanFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         user = FirebaseAuth.getInstance().getCurrentUser();
-        databaseReference = FirebaseDatabase.getInstance().getReference("users").child(user.getUid()); // add .child(list of tips)
+        databaseReference = FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("plan"); // add .child(list of tips)
     }
 
     @Override
@@ -48,7 +48,13 @@ public class PlanFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 plan.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    // populate list later
+                    PlanModel planItem = dataSnapshot.getValue(PlanModel.class);
+                    if (planItem != null) {
+                        if (!planItem.getRef().isEmpty()) {
+                            planItem.setSub(findRef(planItem.getRef()));
+                        }
+                        plan.add(planItem);
+                    }
                 }
                 adapter.notifyDataSetChanged();
 
@@ -60,5 +66,14 @@ public class PlanFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private String findRef(String ref) {
+        for (PlanModel planItem : plan) {
+            if (planItem.getQid().equals(ref)) {
+                return planItem.getAnswer();
+            }
+        }
+        return "";
     }
 }

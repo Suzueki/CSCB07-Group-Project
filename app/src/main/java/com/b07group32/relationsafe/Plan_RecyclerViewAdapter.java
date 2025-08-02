@@ -36,8 +36,11 @@ public class Plan_RecyclerViewAdapter extends RecyclerView.Adapter<Plan_Recycler
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
        String tip = plan.get(position).getTip();
        String answer = plan.get(position).getAnswer().trim();
+       String sub = plan.get(position).getSub().trim();
+       String text = tip.replace("{answer}", answer);
+       text = tip.replace("{sub}", sub);
 
-       holder.tvTip.setText(tip.replace("{answer}", answer));
+       holder.tvTip.setText(text);
        holder.editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
