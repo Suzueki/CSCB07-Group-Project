@@ -13,11 +13,12 @@ public class MultipleResponseChoice extends MultipleChoice implements Respondabl
     public void setResponse(String response) {
         this.response = response;
     }
-    @Override
 
     public String getResponse() {
         return response;
     }
     @Override
     public String getHint() { return hint; }
+    @Override
+    public String getType() { return "multiple_response_choice"; }
 }

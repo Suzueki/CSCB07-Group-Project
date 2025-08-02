@@ -5,4 +5,8 @@ public class DropdownChoice extends Choice{
     public DropdownChoice(String choice) {
         super(choice);
     }
+    @Override
+    public String getType() {
+        return "dropdown";
+    }
 }

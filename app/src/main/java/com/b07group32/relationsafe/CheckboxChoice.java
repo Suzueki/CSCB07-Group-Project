@@ -1,12 +1,12 @@
 package com.b07group32.relationsafe;
 
-public class DateChoice extends Choice{
-    public DateChoice(String choice) {
+public class CheckboxChoice extends Choice{
+    public CheckboxChoice(String choice) {
         super(choice);
-
     }
+
     @Override
     public String getType() {
-        return "date";
+        return "checkbox";
     }
 }

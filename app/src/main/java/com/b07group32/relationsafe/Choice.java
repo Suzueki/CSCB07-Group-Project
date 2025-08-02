@@ -7,7 +7,10 @@ public abstract class Choice {
         this.choice = choice;
     }
 
-    public String getResponse() {
+    public String getChoice() {
         return this.choice;
     }
+
+    public abstract String getType();
+
 }

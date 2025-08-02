@@ -8,7 +8,12 @@ public class FreeFormChoice extends Choice implements Respondable{
         super(hint);
     }
 
-    public String getResponse() { return response; }
+    @Override
+    public String getType() {
+        return "freeform";
+    }
+
+    public String getChoice() { return response; }
     @Override
     public void setResponse(String response) { this.response = response; }
     @Override

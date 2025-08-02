@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone">
 
-       <!-- will ideally change colour when selected -->
+        <!-- will ideally change colour when selected -->
         <RadioButton
             android:id="@+id/choice1"
             android:layout_width="match_parent"
@@ -162,7 +162,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:visibility="visible" />
+        android:visibility="gone"/>
+
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dropdown"
+        android:hint="Enter a city"
+        android:layout_marginVertical="8dp"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="@color/gray"
+        android:padding="16dp"
+        android:drawableEnd = "@drawable/ic_dropdown"/>
+
 
     <!-- back, next, and submit buttons -->
     <RelativeLayout

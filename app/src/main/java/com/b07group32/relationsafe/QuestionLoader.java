@@ -18,7 +18,8 @@ public class QuestionLoader {
                             .registerSubtype(MultipleResponseChoice.class, "multiple_response_choice")
                             .registerSubtype(FreeFormChoice.class, "freeform")
                             .registerSubtype(DropdownChoice.class, "dropdown")
-                            .registerSubtype(DateChoice.class, "date"))
+                            .registerSubtype(DateChoice.class, "date")
+                            .registerSubtype(CheckboxChoice.class, "checkbox"))
             .create();
 
     public static Form loadQuestions(Context context, String filename) {

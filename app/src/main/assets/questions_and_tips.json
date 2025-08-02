@@ -76,19 +76,19 @@
 			"question": "Which form(s) of abuse are you experiencing?",
 			"choices": [
 				{
-					"type": "multiple_choice",
+					"type": "checkbox",
 					"choice": "Physical"
 				},
 				{
-					"type": "multiple_choice",
+					"type": "checkbox",
 					"choice": "Emotional"
 				},
 				{
-					"type": "multiple_choice",
+					"type": "checkbox",
 					"choice": "Financial"
 				},
 				{
-					"type": "multiple_choice",
+					"type": "checkbox",
 					"choice": "Other"
 				}
 			]
