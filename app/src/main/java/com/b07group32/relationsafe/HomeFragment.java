@@ -23,6 +23,8 @@ public class HomeFragment extends Fragment {
         Button buttonScroller = view.findViewById(R.id.buttonScroller);
         Button buttonEmergencyInfoStorage = view.findViewById(R.id.buttonEmergencyStorage);
         Button buttonSpinner = view.findViewById(R.id.buttonSpinner);
+        Button buttonManageItems = view.findViewById(R.id.buttonManageItems);
+        Button buttonQuestionaire = view.findViewById(R.id.buttonQuestionaire);
 
         buttonRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,16 +36,7 @@ public class HomeFragment extends Fragment {
         buttonEmergencyInfoStorage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Check authentication before navigating
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-                if (auth.getCurrentUser() != null) {
-                    // User is authenticated, go to emergency info storage
-                    loadFragment(new EmergencyInfoStorageFragment());
-                } else {
-                    // User is not authenticated, go to login
-                    Toast.makeText(getContext(), "Please log in to access emergency info storage", Toast.LENGTH_LONG).show();
-                    loadFragment(new LoginFragment());
-                }
+                loadFragment(new EmergencyInfoStorageFragment());
             }
         });
 
@@ -59,6 +52,12 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 loadFragment(new SpinnerFragment());
             }
+        });
+
+
+        buttonQuestionaire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { loadFragment(new QuestionnaireFragment());}
         });
 
         return view;

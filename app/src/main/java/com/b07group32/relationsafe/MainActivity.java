@@ -1,5 +1,7 @@
 package com.b07group32.relationsafe;
 
+import static com.b07group32.relationsafe.R.*;
+
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,7 +10,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,21 +28,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
         db = FirebaseDatabase.getInstance("https://relationsafe-20cde-default-rtdb.firebaseio.com/");
         DatabaseReference myRef = db.getReference("testDemo");
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signOut();
 
-        if (savedInstanceState == null) {
-            if (auth.getCurrentUser() == null) {
-                loadFragment(new HomeFragment());
-            } else {
-                loadFragment(new EmergencyInfoStorageFragment());
-            }
+        if (auth.getCurrentUser() != null) {
+            loadFragment(new HomeFragment());
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        } else {
+            loadFragment(new LoginFragment());
+            bottomNavigationView.setVisibility(View.GONE);
         }
 
         setupEmergencyExitFAB();
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if(item.getItemId() == R.id.nav_home){
+                setCurrentFragment(new HomeFragment());
+            }
+            if(item.getItemId() == R.id.nav_documents){
+                setCurrentFragment(new HomeFragment());
+            }
+            if(item.getItemId() == R.id.nav_settings){
+                setCurrentFragment(new HomeFragment());
+            }
+            return true;
+        });
     }
 
     private void loadFragment(Fragment fragment) {
@@ -80,5 +99,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
         startActivity(intent);
         finishAffinity();
+    }
+
+    private void setCurrentFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
     }
 }

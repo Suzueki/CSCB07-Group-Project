@@ -1,0 +1,329 @@
+{
+	"warm_up": [
+		{
+			"id": "w1",
+			"question": "Which best describes your situation?",
+			"choices": [
+				{
+					"type": "multiple_choice",
+					"choice": "Still in a relationship"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "Planning to leave"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "Post-separation"
+				}
+			]
+		},
+		{
+			"id": "w2",
+			"question": "What city do you live in?",
+			"choices": [
+				{ "type": "dropdown" }
+			]
+		},
+		{
+			"id": "w3",
+			"question": "Which room in your home feels the safest if you need to get away quickly?",
+			"choices": [
+				{ "type":  "freeform" }
+			]
+		},
+		{
+			"id": "w4",
+			"question": "Who do you live with?",
+			"choices": [
+				{
+					"type": "multiple_choice",
+					"choice": "Family"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "Roommates"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "Alone"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "Partner"
+				}
+			]
+		},
+		{
+			"id": "w5",
+			"question": "Do you have children?",
+			"choices": [
+				{
+					"type": "multiple_choice",
+					"choice": "No"
+				},
+				{
+					"type": "multiple_response_choice",
+					"choice": "Yes",
+					"hint": "Enter a code word"
+				}
+			]
+		}
+	],
+	"still_in_relationship": [
+		{
+			"id": "sr1",
+			"question": "Which form(s) of abuse are you experiencing?",
+			"choices": [
+				{
+					"type": "checkbox",
+					"choice": "Physical"
+				},
+				{
+					"type": "checkbox",
+					"choice": "Emotional"
+				},
+				{
+					"type": "checkbox",
+					"choice": "Financial"
+				},
+				{
+					"type": "checkbox",
+					"choice": "Other"
+				}
+			]
+		},
+		{
+			"id": "sr2",
+			"question": "Are you recording the incidents (dates, times, details)?",
+			"choices": [
+				{
+					"type": "multiple_choice",
+					"choice": "Yes"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "No"
+				}
+			]
+		},
+		{
+			"id": "sr3",
+			"question": "Name one person you can call immediately in an emergency.",
+			"choices": [
+				{ "type":  "freeform" }
+			]
+		}
+	],
+	"planning_to_leave": [
+		{
+			"id": "pl1",
+			"question": "When do you plan to leave?",
+			"choices": [
+				{ "type":  "date" }
+			]
+		},
+		{
+			"id": "pl2",
+			"question": "Do you have a go-bag packed with essentials?",
+			"choices": [
+				{
+					"type": "multiple_choice",
+					"choice": "Yes"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "No"
+				}
+			]
+		},
+		{
+			"id": "pl3",
+			"question": "Where do you keep your emergency cash or cards?",
+			"choices": [
+				{ "type":  "freeform" }
+			]
+		},
+		{
+			"id": "pl4",
+			"question": "Have you identified a safe place to stay?",
+			"choices": [
+				{
+					"type": "multiple_response_choice",
+					"choice": "Yes",
+					"hint": "Enter a temporary shelter"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "No"
+				}
+			]
+		}
+	],
+	"post_separation": [
+		{
+			"id": "ps1",
+			"question": "Has the abuser continued any contact?",
+			"choices": [
+				{
+					"type": "multiple_choice",
+					"choice": "Yes"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "No"
+				}
+			]
+		},
+		{
+			"id": "ps2",
+			"question": "Do you have a protection order? If yes, which type?",
+			"choices": [
+				{
+					"type": "multiple_response_choice",
+					"choice": "Yes",
+					"hint": "Enter a temporary shelter"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "No"
+				}
+			]
+		},
+		{
+			"id": "ps3",
+			"question": "Are you using any safety tools (cameras, door alarms)?",
+			"choices": [
+				{
+					"type": "multiple_response_choice",
+					"choice": "Yes",
+					"hint": "Enter an equipment"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "No"
+				}
+			]
+		}
+	],
+	"follow_up": [
+		{
+			"id": "f1",
+			"question": "Which type of support would help you most right now?",
+			"choices": [
+				{
+					"type": "multiple_choice",
+					"choice": "Counselling"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "Legal aid"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "Financial guidance"
+				},
+				{
+					"type": "multiple_choice",
+					"choice": "Co-parenting resources"
+				}
+			]
+		}
+	],
+	
+	"tips": [
+		{
+			"qid": "w1",
+			"tips": [
+				{"response": "Still in a relationship", "tip": "Keep this plan updated, and remember you can always reach out if things escalate.", "ref":  ""},
+				{"response": "Planning to leave", "tip": "Start packing small items now so you’re ready when you decide to leave.", "ref":  ""},
+				{"response": "Post-separation", "tip": "It’s normal to feel unsettled, refer back to this plan whenever you need a safety reminder.", "ref":  ""}
+			]
+		},
+		{
+			"qid": "w2",
+			"tips": [{"tip": "Save the local support numbers for {answer} in your phone’s speed-dial so you can call immediately if you need help.", "ref":  ""}]
+		},
+		{
+			"qid": "w3",
+			"tips": [{"tip": "Keep your essentials (phone, keys, and a small flashlight) in {answer} so you can grab them instantly when you need to leave.", "ref":  ""}]
+		},
+		{
+			"qid": "w4",
+			"tips": [
+				{"response": "Family", "tip": "Let those you live with: family know your safe room and cue‐word so they can support you in an emergency.", "ref":  ""},
+				{"response": "Alone", "tip": "Since you live alone, identify a trusted neighbor or friend and share your safe room location with them.", "ref":  ""},
+				{"response": "Partner", "tip": "Because you live with your partner, keep your safety plan hidden (in {sub}), and consider storing a digital copy in a password-protected note they won’t see.", "ref":  "w3"}
+			]
+		},
+		{
+			"qid": "w5",
+			"tips": [
+				{"response": "Yes", "tip": "Practice your safety plan with your children so that when they hear {answer}, they know exactly what to do.", "ref":  ""},
+				{"response": "No", "tip": "Even without children, it helps to identify a second safe space in your home.", "ref":  ""}
+			]
+		},
+		{
+			"qid": "sr1",
+			"tips": [{"tip": "If you face {answer} abuse, remember you don't have to face it alone. Reach out to your emergency contact right away.", "ref":  ""}]
+		},
+		{
+			"qid": "sr2",
+			"tips": [
+				{"response": "Yes", "tip": "Log each incident (date, time, and a brief note) so you have clear records if needed later.", "ref":  ""},
+				{"response": "No", "tip": "Even brief notes on your phone can be helpful. Start logging today.", "ref":  ""}
+			]
+		},
+		{
+			"qid": "sr3",
+			"tips": [{"tip": "Save {answer} in your phone under a code-word so you can quietly call them when you need help.", "ref":  ""}]
+		},
+		{
+			"qid": "pl1",
+			"tips": [{"tip": "Set a real target {answer} and pack one essential item each day until you’re ready.", "ref":  ""}]
+		},
+		{
+			"qid": "pl2",
+			"tips": [
+				{"response": "Yes", "tip": "Great! Keep your go-bag in a hidden spot so you can grab it quickly.", "ref":  ""},
+				{"response": "No", "tip": "Pack a simple go-bag today with essentials like your ID, some cash, and a charger.", "ref":  ""}
+			] 
+		},
+		{
+			"qid": "pl3",
+			"tips": [{"tip": "Stash some cash and a spare card in {answer}, a spot your partner won’t suspect.", "ref":  ""}]
+		},
+		{
+			"qid": "pl4",
+			"tips": [
+				{"response": "Yes", "tip": "Make sure {answer} knows you may arrive unexpectedly and how to contact you.", "ref":  ""},
+				{"response": "No", "tip": "Reach out to Victim Services Toronto or a trusted friend now to secure a shelter option before you leave.", "ref":  ""}
+			]
+		},
+		{
+			"qid": "ps1",
+			"tips": [
+				{"response": "Yes", "tip": "Since you’ve heard from them, stay vigilant and keep your protection order handy if you have one.", "ref":  ""},
+				{"response": "No", "tip": "Even without contact, keep your doors locked and your phone on in case you need to call 911.", "ref":  ""}
+			]
+		},
+		{
+			"qid": "ps2",
+			"tips": [
+				{"response": "Yes", "tip": "Carry your {answer} at all times and share copies with anyone who needs to know.", "ref":  ""},
+				{"response": "No", "tip": "Consider applying for a protection order; it can help deter unwanted contact.", "ref":  ""}
+			]
+		},
+		{
+			"qid": "ps3",
+			"tips": [
+				{"response": "Yes", "tip": "Make sure your {answer} is in working order and placed where you’ll notice it.", "ref":  ""},
+				{"response": "No", "tip": "Consider installing a simple door alarm or camera to alert you to unexpected entry.", "ref":  ""}
+			]
+		},
+		{
+			"qid": "f1",
+			"tips": [{"tip": "Reach out to {answer} - they can offer the specialized help you need right now.", "ref":  ""}]
+		}
+	]
+}	

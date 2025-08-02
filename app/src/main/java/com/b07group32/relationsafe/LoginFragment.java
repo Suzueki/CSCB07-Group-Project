@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
@@ -175,7 +176,7 @@ public class LoginFragment extends Fragment {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getContext(), "PIN login successful", Toast.LENGTH_SHORT).show();
-                                loadFragment(new EmergencyInfoStorageFragment());
+                                loadFragment(new HomeFragment());
                             }
                             else {
                                 Toast.makeText(getContext(), "Authentication failed. Please use email login.",
@@ -224,7 +225,7 @@ public class LoginFragment extends Fragment {
         try {
             if(isPinSet()) {
                 // if PIN already exists, go to main app
-                loadFragment(new EmergencyInfoStorageFragment());
+                loadFragment(new HomeFragment());
             }
             else {
                 // if PIN not set, prompts user to create one
@@ -405,7 +406,7 @@ public class LoginFragment extends Fragment {
                     .apply();
 
             Toast.makeText(getContext(), "PIN set successfully", Toast.LENGTH_SHORT).show();
-            loadFragment(new EmergencyInfoStorageFragment());
+            loadFragment(new HomeFragment());
 
         }
         catch (GeneralSecurityException | IOException e) {
@@ -419,5 +420,12 @@ public class LoginFragment extends Fragment {
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
+        if(fragment instanceof HomeFragment){
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        } else {
+            bottomNavigationView.setVisibility(View.GONE);
+        }
     }
 }
