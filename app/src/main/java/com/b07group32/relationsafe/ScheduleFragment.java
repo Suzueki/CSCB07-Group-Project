@@ -90,15 +90,7 @@ public class ScheduleFragment extends Fragment {
                 queryUser(0);
             }
         });
-
-
-//        ScrollView scrollView = view.findViewById(R.id.scrollViewID);
         tableLayout = view.findViewById(R.id.tableID);
-
-
-//        TextView textView = view.findViewById(R.id.textView2);
-//        textView.setText("idk");
-
         loadNotifications();
         Log.d("NotificationList", ""+notifications.size());
         for(int i = 0; i<notifications.size(); i++){
