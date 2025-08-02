@@ -1,7 +1,11 @@
 package com.b07group32.relationsafe;
+import android.app.DatePickerDialog;
+import android.content.Context;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +58,8 @@ public class QuestionnaireFragment extends Fragment {
     private RadioButton choice4;
     private EditText shortResponse;
     private AutoCompleteTextView dropdown;
+    private TextView date;
+    private Button selectDateButton;
     private Button buttonBack;
     private Button buttonNext;
     private Button buttonSubmit;
@@ -76,11 +82,15 @@ public class QuestionnaireFragment extends Fragment {
         choice2 = view.findViewById(R.id.choice2);
         choice3 = view.findViewById(R.id.choice3);
         choice4 = view.findViewById(R.id.choice4);
+
         shortResponse = view.findViewById(R.id.shortResponse);
         // Autocomplete Dropdown
         final String[] city = new String[1]; // acts like a mutable container
         ArrayList<String> cities = new ArrayList<>(); //store cities into here from JSON
         dropdown = view.findViewById(R.id.dropdown);
+
+        date = view.findViewById(R.id.dateText);
+        selectDateButton = view.findViewById(R.id.selectDateButton);
 
         buttonBack = view.findViewById(R.id.buttonBack);
         buttonNext = view.findViewById(R.id.buttonNext);
@@ -102,6 +112,21 @@ public class QuestionnaireFragment extends Fragment {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { displayPreviousQuestion(); }
+        });
+
+        buttonSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TK: submit answer
+                Toast.makeText(getContext(), "Submitted", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        selectDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
         });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, cities);
@@ -138,7 +163,7 @@ public class QuestionnaireFragment extends Fragment {
         }
 
         // TK: temporary
-        questionRoute = stillInRelationshipQuestions;
+        questionRoute = planningToLeaveQuestions;
 
         return view;
     }
@@ -160,8 +185,25 @@ public class QuestionnaireFragment extends Fragment {
     }
 
     private void getResponse() {
+        // Consume current state of all choices
 
     }
+
+    private void showDatePickerDialog() { // Doesn't show spinners for some reason
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        Context context = new ContextThemeWrapper(getContext(), R.style.SpinnerDatePickerDialog);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context,
+                R.style.SpinnerDatePickerDialog,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                    date.setText(selectedDate);
+                }, year, month, day);
+        datePickerDialog.show();
+    }
+
 
     private List<Question> sortQuestionsById(List<Question> questions) {
         // Sort questions by ID
@@ -196,6 +238,9 @@ public class QuestionnaireFragment extends Fragment {
         choiceGroup.clearCheck();
         shortResponse.setText("");
 
+        date.setText("");
+        date.setVisibility(View.GONE);
+        selectDateButton.setVisibility(View.GONE);
 
         // Set all to default invisible
         checkboxGroup.setVisibility(View.GONE);
@@ -240,6 +285,10 @@ public class QuestionnaireFragment extends Fragment {
                     shortResponse.setHint(((FreeFormChoice) choice).getHint() == null ?
                             "Enter a response" : ((FreeFormChoice) choice).getHint());
                     shortResponse.setVisibility(View.VISIBLE);
+                    break;
+                case "date":
+                    date.setText(choice.getChoice());
+                    selectDateButton.setVisibility(View.VISIBLE);
                     break;
             }
         }
