@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -210,9 +212,9 @@ public class SupportConnectionFragment extends Fragment {
         // Category header
         TextView categoryHeader = new TextView(getContext());
         categoryHeader.setText(categoryName);
-        categoryHeader.setTextSize(18);
-        categoryHeader.setTextColor(getResources().getColor(android.R.color.black));
-        categoryHeader.setPadding(0, 32, 0, 16);
+        categoryHeader.setTextSize(20);
+        categoryHeader.setTextColor(ContextCompat.getColor(getContext(), android.R.color.black));
+        categoryHeader.setPadding(0, 24, 0, 12);
         categoryHeader.setTypeface(null, android.graphics.Typeface.BOLD);
         supportLinksContainer.addView(categoryHeader);
 
@@ -227,21 +229,27 @@ public class SupportConnectionFragment extends Fragment {
 
         LinearLayout serviceLayout = new LinearLayout(getContext());
         serviceLayout.setOrientation(LinearLayout.VERTICAL);
-        serviceLayout.setPadding(16, 12, 16, 12);
-        serviceLayout.setBackgroundColor(getResources().getColor(android.R.color.white));
+        serviceLayout.setPadding(20, 16, 20, 16);
+
+        // Create rounded background
+        GradientDrawable background = new GradientDrawable();
+        background.setColor(ContextCompat.getColor(getContext(), android.R.color.white));
+        background.setCornerRadius(12f);
+        background.setStroke(1, ContextCompat.getColor(getContext(), android.R.color.darker_gray));
+        serviceLayout.setBackground(background);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
-        layoutParams.setMargins(0, 0, 0, 8);
+        layoutParams.setMargins(0, 0, 0, 12);
         serviceLayout.setLayoutParams(layoutParams);
 
         // Service name
         TextView nameText = new TextView(getContext());
         nameText.setText(service.name);
-        nameText.setTextSize(16);
-        nameText.setTextColor(getResources().getColor(android.R.color.black));
+        nameText.setTextSize(18);
+        nameText.setTextColor(ContextCompat.getColor(getContext(), android.R.color.black));
         nameText.setTypeface(null, android.graphics.Typeface.BOLD);
         serviceLayout.addView(nameText);
 
@@ -249,58 +257,70 @@ public class SupportConnectionFragment extends Fragment {
         TextView descText = new TextView(getContext());
         descText.setText(service.description);
         descText.setTextSize(14);
-        descText.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        descText.setTextColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
+        descText.setPadding(0, 4, 0, 0);
         serviceLayout.addView(descText);
 
-        // Phone number and buttons layout
-        LinearLayout buttonLayout = new LinearLayout(getContext());
-        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-        buttonLayout.setPadding(0, 8, 0, 0);
+        // Phone and website layout
+        LinearLayout contactLayout = new LinearLayout(getContext());
+        contactLayout.setOrientation(LinearLayout.HORIZONTAL);
+        contactLayout.setPadding(0, 12, 0, 0);
 
-        // Phone text
+        // Phone number (clickable)
         TextView phoneText = new TextView(getContext());
         phoneText.setText(service.phone);
         phoneText.setTextSize(16);
-        phoneText.setTextColor(getResources().getColor(android.R.color.holo_blue_dark));
-        phoneText.setPadding(0, 0, 16, 0);
-        buttonLayout.addView(phoneText);
+        phoneText.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_blue_dark));
+        phoneText.setTypeface(null, android.graphics.Typeface.BOLD);
+        phoneText.setOnClickListener(v -> {
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:" + service.phone));
+            startActivity(callIntent);
+        });
+        contactLayout.addView(phoneText);
 
-        // Visit Website button
+        // Add website if available
         if (service.website != null && !service.website.isEmpty()) {
-            Button websiteButton = new Button(getContext());
-            websiteButton.setText("Visit Website");
-            websiteButton.setTextSize(12);
-            websiteButton.setPadding(24, 8, 24, 8);
-            websiteButton.setOnClickListener(v -> {
+            // Separator
+            TextView separator = new TextView(getContext());
+            separator.setText(" • ");
+            separator.setTextSize(16);
+            separator.setTextColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
+            contactLayout.addView(separator);
+
+            // Website link
+            TextView websiteText = new TextView(getContext());
+            websiteText.setText("Website");
+            websiteText.setTextSize(16);
+            websiteText.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_blue_dark));
+            websiteText.setTypeface(null, android.graphics.Typeface.BOLD);
+            websiteText.setOnClickListener(v -> {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(service.website));
                 startActivity(browserIntent);
             });
-            buttonLayout.addView(websiteButton);
+            contactLayout.addView(websiteText);
         }
 
-        // Copy phone number button
-        Button copyButton = new Button(getContext());
-        copyButton.setText("Copy Phone");
-        copyButton.setTextSize(12);
-        copyButton.setPadding(24, 8, 24, 8);
-        copyButton.setOnClickListener(v -> {
-            ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("Phone Number", service.phone);
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(getContext(), "Phone number copied", Toast.LENGTH_SHORT).show();
-        });
-        buttonLayout.addView(copyButton);
-
-        serviceLayout.addView(buttonLayout);
+        serviceLayout.addView(contactLayout);
         supportLinksContainer.addView(serviceLayout);
     }
+
+
 
     private void displayNoServicesMessage() {
         TextView noServicesText = new TextView(getContext());
         noServicesText.setText("No support services available for your city. Please contact emergency services at 911 if you need immediate help.");
         noServicesText.setTextSize(16);
-        noServicesText.setPadding(16, 32, 16, 32);
-        noServicesText.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        noServicesText.setPadding(20, 32, 20, 32);
+        noServicesText.setTextColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
+
+        // Create rounded background for no services message
+        GradientDrawable background = new GradientDrawable();
+        background.setColor(ContextCompat.getColor(getContext(), android.R.color.white));
+        background.setCornerRadius(12f);
+        background.setStroke(1, ContextCompat.getColor(getContext(), android.R.color.darker_gray));
+        noServicesText.setBackground(background);
+
         supportLinksContainer.addView(noServicesText);
     }
 }
