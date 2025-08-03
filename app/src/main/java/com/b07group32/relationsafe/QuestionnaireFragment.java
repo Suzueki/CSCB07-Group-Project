@@ -1,12 +1,9 @@
 package com.b07group32.relationsafe;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +25,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class QuestionnaireFragment extends Fragment {
+    private PlanDatabaseManager db;
+
     // List of questions
     // Future idea: conform to open-closed principle
     private List<Question> questionRoute = null;
@@ -65,10 +65,14 @@ public class QuestionnaireFragment extends Fragment {
     private Button buttonBack;
     private Button buttonNext;
     private Button buttonSubmit;
+    private ArrayList<TipContainer> tips;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_questionnaire, container, false);
+        // Initialize Firebase database manager
+        db = new PlanDatabaseManager();
+
         // Get views from the layout
         questionLayout = view.findViewById(R.id.questionLayout);
         questionContent = view.findViewById(R.id.questionContent);
@@ -105,8 +109,8 @@ public class QuestionnaireFragment extends Fragment {
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getResponse();
                 displayNextQuestion();
-
             }
         });
 
@@ -118,8 +122,7 @@ public class QuestionnaireFragment extends Fragment {
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TK: submit answer
-                Toast.makeText(getContext(), "Submitted", Toast.LENGTH_SHORT).show();
+                getResponse();
             }
         });
 
@@ -163,7 +166,7 @@ public class QuestionnaireFragment extends Fragment {
             Toast.makeText(getContext(), "No questions found", Toast.LENGTH_SHORT).show();
         }
 
-        // TK: temporary
+        // initial route
         questionRoute = planningToLeaveQuestions;
 
         return view;
@@ -188,9 +191,93 @@ public class QuestionnaireFragment extends Fragment {
     private void getResponse() {
         // Consume current state of all choices
 
+        // Callback method to change route based on response
+        PlanDatabaseManager.PlanUpdateCallback callback = new PlanDatabaseManager.PlanUpdateCallback() {
+            @Override
+            public void onSuccess(String action, String qid, String response) {
+                if (qid.equals("w1")) {
+                    switch (response) { // Bad: Hardcoded to values in JSON
+                        case "Still in a relationship":
+                            questionRoute = stillInRelationshipQuestions;
+                            break;
+                        case "Planning to leave":
+                            questionRoute = planningToLeaveQuestions;
+                            break;
+                        case "Post-separation":
+                            questionRoute = postSeparationQuestions;
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+            }
+        };
+        HashMap<String, Object> response = new HashMap<>();
+        String qid = questionList.get(questionIndex).getQuestionId();
+        String answer = "";
+        String tip = "";
+
+        RadioButton[] buttons = {choice1, choice2, choice3, choice4};
+        CheckBox[] checkBoxes = {checkbox1, checkbox2, checkbox3, checkbox4};
+
+        // Handle each response type (bad for expandability)
+        // Future: refactor to conform to design principles
+        if (choiceGroup.getVisibility() == View.VISIBLE) {
+            for (RadioButton button : buttons) {
+                if (button.isChecked()) {
+                    tip = TipSearcher.findMatchingTip(tips,
+                            questionList.get(questionIndex).getQuestionId(),
+                            button.getText().toString());
+                    answer = button.getText().toString();
+                    break;
+                }
+            }
+        }
+        if (checkboxGroup.getVisibility() == View.VISIBLE) {
+            for (CheckBox checkBox : checkBoxes) {
+                if (checkBox.isChecked()) {
+                    answer = answer.concat(checkBox.getText().toString()).concat(", ");
+                    tip = TipSearcher.findMatchingTip(tips, questionList.get(questionIndex).getQuestionId(), null);
+                }
+            }
+            answer = strip(answer);
+        }
+        if (shortResponse.getVisibility() == View.VISIBLE) {
+            //answer = answer.concat(shortResponse.getText().toString());
+            answer = answer + " " + shortResponse.getText().toString();
+            tip = TipSearcher.findMatchingTip(tips, questionList.get(questionIndex).getQuestionId(), answer);
+        }
+        if (dropdown.getVisibility() == View.VISIBLE) {
+            answer = dropdown.getText().toString();
+            tip = TipSearcher.findMatchingTip(tips, questionList.get(questionIndex).getQuestionId(), answer);
+        }
+        if (date.getVisibility() == View.VISIBLE) {
+            answer = date.getText().toString();
+            tip = TipSearcher.findMatchingTip(tips, questionList.get(questionIndex).getQuestionId(), answer);
+        }
+
+        // Add to db
+        if (answer.isEmpty()) {
+            return;
+        }
+        response.put("qid", qid);
+        response.put("answer", answer);
+        response.put("tip", tip);
+        db.addResponse(response, callback);
     }
 
-    private void showDatePickerDialog() { // Doesn't show spinners for some reason
+    @NonNull
+    private static String strip(String answer) {
+        if (answer.endsWith(", ")) {
+            answer = answer.substring(0, answer.length() - 2);
+        }
+        return answer;
+    }
+
+    private void showDatePickerDialog() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -223,6 +310,7 @@ public class QuestionnaireFragment extends Fragment {
         planningToLeaveQuestions = sortQuestionsById(form.planning_to_leave);
         postSeparationQuestions = sortQuestionsById(form.post_separation);
         followUpQuestions = sortQuestionsById(form.follow_up);
+        tips = form.tips;
     }
 
     private void setQuestionView(int index, List<Question> questions) {
@@ -287,6 +375,7 @@ public class QuestionnaireFragment extends Fragment {
                 case "freeform":
                     shortResponse.setHint(((FreeFormChoice) choice).getHint() == null ?
                             "Enter a response" : ((FreeFormChoice) choice).getHint());
+                    shortResponse.setEnabled(true);
                     shortResponse.setVisibility(View.VISIBLE);
                     break;
                 case "date":
