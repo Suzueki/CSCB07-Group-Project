@@ -25,6 +25,14 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        LinearLayout buttonScheduleReminders = view.findViewById(R.id.buttonScheduleReminders);
+        buttonScheduleReminders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment(new ScheduleFragment());
+            }
+        });
+
         return view;
     }
 
