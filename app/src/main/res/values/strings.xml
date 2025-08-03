@@ -15,6 +15,7 @@
     <string name="freetext_hint">Enter your response</string>
     <string name="string_back">Back</string>
     <string name="string_next">Next</string>
+    <string name="string_submit">Submit</string>
     <string name="home">Home</string>
     <string name="documents">Documents</string>
     <string name="settings">Settings</string>
