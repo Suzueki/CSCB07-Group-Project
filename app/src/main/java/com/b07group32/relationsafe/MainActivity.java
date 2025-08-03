@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference myRef = db.getReference("testDemo");
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        // auth.signOut(); // maintain auth for debugging purpose
+        auth.signOut(); // maintain auth for debugging purpose
 
         if (auth.getCurrentUser() == null) {
             loadFragment(new HomeFragment());
