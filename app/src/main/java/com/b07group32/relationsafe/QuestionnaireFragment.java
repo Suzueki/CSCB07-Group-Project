@@ -75,6 +75,30 @@ public class QuestionnaireFragment extends Fragment {
     private Button buttonSubmit;
     private ArrayList<TipContainer> tips;
 
+    /**
+     * Factory method to create a new instance of QuestionnaireFragment
+     * @param mode The mode of operation ("edit", "change branch", etc.)
+     * @param questionId The ID of the question to display/edit
+     * @return A new instance of QuestionnaireFragment
+     */
+    public static QuestionnaireFragment newInstance(String mode, String questionId) {
+        QuestionnaireFragment fragment = new QuestionnaireFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_MODE, mode);
+        args.putString(ARG_QUESTION_ID, questionId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mode = getArguments().getString(ARG_MODE);
+            questionId = getArguments().getString(ARG_QUESTION_ID);
+        }
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_questionnaire, container, false);
@@ -163,23 +187,83 @@ public class QuestionnaireFragment extends Fragment {
         });
 
         loadAllQuestions();
-        startQuestionList = warmUpQuestions;
 
-        // TODO: initial loaded list of questions can be changed, perhaps using parameter from fragment
-        questionList = startQuestionList;
-        nextQuestionList = null;
-        prevQuestionList = null;
-
-        if (questionList != null && !questionList.isEmpty()) {
-            displayQuestion(questionList.get(questionIndex).getQuestionId(), questionList);
+        // Handle different modes
+        if (mode != null && questionId != null) {
+            handleModeAndQuestionId();
         } else {
-            Toast.makeText(getContext(), "No questions found", Toast.LENGTH_SHORT).show();
+            // Default behavior when no arguments are provided
+            startQuestionList = warmUpQuestions;
+            questionList = startQuestionList;
+            nextQuestionList = null;
+            prevQuestionList = null;
+
+            if (questionList != null && !questionList.isEmpty()) {
+                displayQuestion(questionList.get(questionIndex).getQuestionId(), questionList);
+            } else {
+                Toast.makeText(getContext(), "No questions found", Toast.LENGTH_SHORT).show();
+            }
         }
 
         // initial route
         questionRoute = planningToLeaveQuestions;
 
         return view;
+    }
+
+    private void handleModeAndQuestionId() {
+        switch (mode) {
+            case "edit":
+                // Find the question in all question lists and display it for editing
+                List<Question> targetList = findQuestionList(questionId);
+                if (targetList != null) {
+                    questionList = targetList;
+                    displayQuestion(questionId, questionList);
+                    // Adjust button text for edit mode
+                    buttonNext.setText("Save");
+                    buttonBack.setText("Cancel");
+                } else {
+                    Toast.makeText(getContext(), "Question not found", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case "change branch":
+                // Handle branch change logic - this might involve going back to warm-up questions
+                // or changing the question route
+                if (questionId.equals("w1")) {
+                    questionList = warmUpQuestions;
+                    displayQuestion(questionId, questionList);
+                    buttonNext.setText("Update Branch");
+                }
+                break;
+
+            default:
+                // Default behavior
+                startQuestionList = warmUpQuestions;
+                questionList = startQuestionList;
+                displayQuestion(questionList.get(0).getQuestionId(), questionList);
+                break;
+        }
+    }
+
+    private List<Question> findQuestionList(String qId) {
+        // Search through all question lists to find which one contains the question ID
+        if (searchQuestionInList(warmUpQuestions, qId)) return warmUpQuestions;
+        if (searchQuestionInList(stillInRelationshipQuestions, qId)) return stillInRelationshipQuestions;
+        if (searchQuestionInList(planningToLeaveQuestions, qId)) return planningToLeaveQuestions;
+        if (searchQuestionInList(postSeparationQuestions, qId)) return postSeparationQuestions;
+        if (searchQuestionInList(followUpQuestions, qId)) return followUpQuestions;
+        return null;
+    }
+
+    private boolean searchQuestionInList(List<Question> questions, String qId) {
+        if (questions == null) return false;
+        for (Question q : questions) {
+            if (q.getQuestionId().equals(qId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setButtonVisibility() {
@@ -314,6 +398,7 @@ public class QuestionnaireFragment extends Fragment {
         questions.sort((q1, q2) -> q1.getQuestionId().compareTo(q2.getQuestionId()));
         return questions;
     }
+
     private void loadAllQuestions() {
         Form form = QuestionLoader.loadQuestions(getContext(), "questions_and_tips.json");
         if (form == null || form.warm_up == null) {
@@ -460,6 +545,7 @@ public class QuestionnaireFragment extends Fragment {
     private void displayQuestion(String questionId, List<Question> questions) {
         for (int i = 0; i < questions.size(); i++) {
             if (questions.get(i).getQuestionId().equals(questionId)) {
+                questionIndex = i; // Update the index to match the found question
                 setQuestionView(i, questions);
                 return;
             }
@@ -514,6 +600,4 @@ public class QuestionnaireFragment extends Fragment {
     private void setQuestionIndex(int index) {
         questionIndex = index;
     }
-
-
 }
