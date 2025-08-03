@@ -78,4 +78,8 @@ public class PlanDatabaseManager {
             }
         });
     }
+
+    public DatabaseReference getDatabase() {
+        return ref;
+    }
 }

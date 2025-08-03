@@ -24,9 +24,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class QuestionnaireFragment extends Fragment {
     private PlanDatabaseManager db;
@@ -123,6 +131,8 @@ public class QuestionnaireFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getResponse();
+                Toast.makeText(getContext(), "Response submitted", Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
             }
         });
 
@@ -260,8 +270,12 @@ public class QuestionnaireFragment extends Fragment {
         }
 
         // Add to db
-        if (answer.isEmpty()) {
+        if (answer.isBlank()) {
             return;
+        }
+        if (tip != null && !tip.isBlank()) {
+            String[] answerParts = answer.split(" ");
+            tip = tip.replace("{answer}", answerParts.length == 2 ? answerParts[1] : answer);
         }
         response.put("qid", qid);
         response.put("answer", answer);
@@ -322,28 +336,7 @@ public class QuestionnaireFragment extends Fragment {
         RadioButton[] buttons = {choice1, choice2, choice3, choice4};
         CheckBox[] checkBoxes = {checkbox1, checkbox2, checkbox3, checkbox4};
 
-        // Reset choices
-        for (CheckBox checkbox : checkBoxes) {
-            checkbox.setChecked(false);
-        }
-        choiceGroup.clearCheck();
-        shortResponse.setText("");
-
-        date.setText("");
-        date.setVisibility(View.GONE);
-        selectDateButton.setVisibility(View.GONE);
-
-        // Set all to default invisible
-        checkboxGroup.setVisibility(View.GONE);
-        for (int i = 0; i < checkBoxes.length; i++) {
-            checkBoxes[i].setVisibility(View.GONE);
-        }
-        choiceGroup.setVisibility(View.GONE);
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].setVisibility(View.GONE);
-        }
-        shortResponse.setVisibility(View.GONE);
-        dropdown.setVisibility(View.GONE);
+        resetUIElements(checkBoxes, buttons, questions.get(index).getQuestionId());
 
         // Set visibility and text for each choice
         for (int i = 0; i < choices.size(); i++) {
@@ -386,6 +379,80 @@ public class QuestionnaireFragment extends Fragment {
             }
         }
         setButtonVisibility();
+    }
+
+    private void resetUIElements(CheckBox[] checkBoxes, RadioButton[] buttons, String qid) {
+        // Reset choices
+        for (CheckBox checkbox : checkBoxes) {
+            checkbox.setChecked(false);
+        }
+        choiceGroup.clearCheck();
+        shortResponse.setText("");
+
+        date.setText("");
+        date.setVisibility(View.GONE);
+        selectDateButton.setVisibility(View.GONE);
+
+        // Set all to default invisible
+        checkboxGroup.setVisibility(View.GONE);
+        for (int i = 0; i < checkBoxes.length; i++) {
+            checkBoxes[i].setVisibility(View.GONE);
+        }
+        choiceGroup.setVisibility(View.GONE);
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].setVisibility(View.GONE);
+        }
+        shortResponse.setVisibility(View.GONE);
+        dropdown.setVisibility(View.GONE);
+
+    }
+
+    private void repopulateUI(String qid) {
+        // Set enabled based on previous results
+        DatabaseReference ref = db.getDatabase();
+        Query query = ref.orderByChild("qid").equalTo(qid);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        Map<String, Object> response = (Map<String, Object>) data.getValue();
+
+
+                        String selectedAnswer = (String) response.get("answer");
+                        if (selectedAnswer != null) {
+                            switch (selectedAnswer) {
+                                case "option1":
+                                    choice1.setChecked(true);
+                                    break;
+                                case "option2":
+                                    choice2.setChecked(true);
+                                    break;
+                                case "option3":
+                                    choice3.setChecked(true);
+                                    break;
+                                case "option4":
+                                    choice4.setChecked(true);
+                                    break;
+                            }
+                        }
+
+                        // Example for multiple-choice (checkboxes)
+                        List<String> selectedAnswers = (List<String>) response.get("answers");
+                        if (selectedAnswers != null) {
+                            checkbox1.setChecked(selectedAnswers.contains("option1"));
+                            checkbox2.setChecked(selectedAnswers.contains("option2"));
+                            // etc.
+                        }
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     // Display a question based on its ID
