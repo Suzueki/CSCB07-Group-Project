@@ -37,6 +37,15 @@ import java.util.List;
 import java.util.Map;
 
 public class QuestionnaireFragment extends Fragment {
+
+    // Constants for fragment arguments
+    private static final String ARG_MODE = "mode";
+    private static final String ARG_QUESTION_ID = "question_id";
+
+    // Instance variables for fragment arguments
+    private String mode;
+    private String questionId;
+
     private PlanDatabaseManager db;
 
     // List of questions
