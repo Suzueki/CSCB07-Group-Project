@@ -120,7 +120,8 @@
 			"id": "pl1",
 			"question": "When do you plan to leave?",
 			"choices": [
-				{ "type":  "date" }
+				{ "type":  "date",
+				"choice": "Enter a date"}
 			]
 		},
 		{
@@ -182,7 +183,7 @@
 				{
 					"type": "multiple_response_choice",
 					"choice": "Yes",
-					"hint": "Enter a temporary shelter"
+					"hint": "Enter a protection order"
 				},
 				{
 					"type": "multiple_choice",

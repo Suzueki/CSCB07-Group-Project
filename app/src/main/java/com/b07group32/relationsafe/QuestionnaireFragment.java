@@ -1,4 +1,6 @@
 package com.b07group32.relationsafe;
+import android.app.DatePickerDialog;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -21,17 +24,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class QuestionnaireFragment extends Fragment {
-    // Constants for arguments
-    private static final String ARG_MODE = "mode";
-    private static final String ARG_QUESTION_ID = "question_id";
-
-    // Instance variables for arguments
-    private String mode;
-    private String questionId;
+    private PlanDatabaseManager db;
 
     // List of questions
     // Future idea: conform to open-closed principle
@@ -62,9 +68,12 @@ public class QuestionnaireFragment extends Fragment {
     private RadioButton choice4;
     private EditText shortResponse;
     private AutoCompleteTextView dropdown;
+    private TextView date;
+    private Button selectDateButton;
     private Button buttonBack;
     private Button buttonNext;
     private Button buttonSubmit;
+    private ArrayList<TipContainer> tips;
 
     /**
      * Factory method to create a new instance of QuestionnaireFragment
@@ -93,6 +102,8 @@ public class QuestionnaireFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_questionnaire, container, false);
+        // Initialize Firebase database manager
+        db = new PlanDatabaseManager();
 
         // Get views from the layout
         questionLayout = view.findViewById(R.id.questionLayout);
@@ -108,30 +119,52 @@ public class QuestionnaireFragment extends Fragment {
         choice2 = view.findViewById(R.id.choice2);
         choice3 = view.findViewById(R.id.choice3);
         choice4 = view.findViewById(R.id.choice4);
+
         shortResponse = view.findViewById(R.id.shortResponse);
         // Autocomplete Dropdown
         final String[] city = new String[1]; // acts like a mutable container
         ArrayList<String> cities = new ArrayList<>(); //store cities into here from JSON
         dropdown = view.findViewById(R.id.dropdown);
 
+        date = view.findViewById(R.id.dateText);
+        selectDateButton = view.findViewById(R.id.selectDateButton);
+
         buttonBack = view.findViewById(R.id.buttonBack);
         buttonNext = view.findViewById(R.id.buttonNext);
         buttonSubmit = view.findViewById(R.id.buttonSubmit);
+
         // TODO: set button's text differently for editing question response
         buttonBack.setText(R.string.string_back);
         buttonNext.setText(R.string.string_next);
+        buttonSubmit.setText(R.string.string_submit);
 
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getResponse();
                 displayNextQuestion();
-
             }
         });
 
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { displayPreviousQuestion(); }
+        });
+
+        buttonSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getResponse();
+                Toast.makeText(getContext(), "Response submitted", Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
+            }
+        });
+
+        selectDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
         });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, cities);
@@ -172,7 +205,7 @@ public class QuestionnaireFragment extends Fragment {
             }
         }
 
-        // TK: temporary
+        // initial route
         questionRoute = planningToLeaveQuestions;
 
         return view;
@@ -241,9 +274,123 @@ public class QuestionnaireFragment extends Fragment {
         }
         if (questionIndex == questionList.size() - 1 && nextQuestionList == null) {
             buttonNext.setVisibility(View.GONE);
+            buttonSubmit.setVisibility(View.VISIBLE);
+
         } else {
             buttonNext.setVisibility(View.VISIBLE);
+            buttonSubmit.setVisibility(View.GONE);
         }
+    }
+
+    private void getResponse() {
+        // Consume current state of all choices
+
+        // Callback method to change route based on response
+        PlanDatabaseManager.PlanUpdateCallback callback = new PlanDatabaseManager.PlanUpdateCallback() {
+            @Override
+            public void onSuccess(String action, String qid, String response) {
+                if (qid.equals("w1")) {
+                    switch (response) { // Bad: Hardcoded to values in JSON
+                        case "Still in a relationship":
+                            questionRoute = stillInRelationshipQuestions;
+                            break;
+                        case "Planning to leave":
+                            questionRoute = planningToLeaveQuestions;
+                            break;
+                        case "Post-separation":
+                            questionRoute = postSeparationQuestions;
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+            }
+        };
+        HashMap<String, Object> response = new HashMap<>();
+        String qid = questionList.get(questionIndex).getQuestionId();
+        String answer = "";
+        String tip = "";
+
+        RadioButton[] buttons = {choice1, choice2, choice3, choice4};
+        CheckBox[] checkBoxes = {checkbox1, checkbox2, checkbox3, checkbox4};
+
+        // Handle each response type (bad for expandability)
+        // Future: refactor to conform to design principles
+        if (choiceGroup.getVisibility() == View.VISIBLE) {
+            for (RadioButton button : buttons) {
+                if (button.isChecked()) {
+                    tip = TipSearcher.findMatchingTip(tips,
+                            questionList.get(questionIndex).getQuestionId(),
+                            button.getText().toString());
+                    answer = button.getText().toString();
+                    break;
+                }
+            }
+        }
+        if (checkboxGroup.getVisibility() == View.VISIBLE) {
+            for (CheckBox checkBox : checkBoxes) {
+                if (checkBox.isChecked()) {
+                    answer = answer.concat(checkBox.getText().toString()).concat(", ");
+                    tip = TipSearcher.findMatchingTip(tips, questionList.get(questionIndex).getQuestionId(), null);
+                }
+            }
+            answer = strip(answer);
+        }
+        if (shortResponse.getVisibility() == View.VISIBLE) {
+            //answer = answer.concat(shortResponse.getText().toString());
+            answer = answer + " " + shortResponse.getText().toString();
+            tip = TipSearcher.findMatchingTip(tips, questionList.get(questionIndex).getQuestionId(), answer);
+        }
+        if (dropdown.getVisibility() == View.VISIBLE) {
+            answer = dropdown.getText().toString();
+            tip = TipSearcher.findMatchingTip(tips, questionList.get(questionIndex).getQuestionId(), answer);
+        }
+        if (date.getVisibility() == View.VISIBLE) {
+            answer = date.getText().toString();
+            tip = TipSearcher.findMatchingTip(tips, questionList.get(questionIndex).getQuestionId(), answer);
+        }
+
+        // Add to db
+        if (answer.isBlank()) {
+            return;
+        }
+        if (tip != null && !tip.isBlank()) {
+            String[] answerParts = answer.split(" ");
+            tip = tip.replace("{answer}", answerParts.length == 2 ? answerParts[1] : answer);
+        }
+        response.put("qid", qid);
+        response.put("answer", answer);
+        response.put("tip", tip);
+        db.addResponse(response, callback);
+    }
+
+    @NonNull
+    private static String strip(String answer) {
+        if (answer.endsWith(", ")) {
+            answer = answer.substring(0, answer.length() - 2);
+        }
+        return answer;
+    }
+
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                    date.setText(selectedDate);
+                }, year, month, day);
+        datePickerDialog.show();
+    }
+
+    private void getDate(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+        String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+        date.setText(selectedDate);
     }
 
     private List<Question> sortQuestionsById(List<Question> questions) {
@@ -253,7 +400,7 @@ public class QuestionnaireFragment extends Fragment {
     }
 
     private void loadAllQuestions() {
-        Form form = QuestionLoader.loadQuestions(getContext(), "test_questions_and_tips.json");
+        Form form = QuestionLoader.loadQuestions(getContext(), "questions_and_tips.json");
         if (form == null || form.warm_up == null) {
             return;
         }
@@ -262,6 +409,7 @@ public class QuestionnaireFragment extends Fragment {
         planningToLeaveQuestions = sortQuestionsById(form.planning_to_leave);
         postSeparationQuestions = sortQuestionsById(form.post_separation);
         followUpQuestions = sortQuestionsById(form.follow_up);
+        tips = form.tips;
     }
 
     private void setQuestionView(int index, List<Question> questions) {
@@ -269,25 +417,11 @@ public class QuestionnaireFragment extends Fragment {
         questionContent.setText(question.getQuestionText());
         questionNumber.setText("Question " + (index + 1) + "/" + questions.size());
 
-        // Reset choices
-        // choiceGroup.clearCheck();
-        shortResponse.setText("");
-
         List<Choice> choices = question.getChoices();
         RadioButton[] buttons = {choice1, choice2, choice3, choice4};
         CheckBox[] checkBoxes = {checkbox1, checkbox2, checkbox3, checkbox4};
 
-        // Set all to default invisible
-        checkboxGroup.setVisibility(View.GONE);
-        for (int i = 0; i < checkBoxes.length; i++) {
-            checkBoxes[i].setVisibility(View.GONE);
-        }
-        choiceGroup.setVisibility(View.GONE);
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].setVisibility(View.GONE);
-        }
-        shortResponse.setVisibility(View.GONE);
-        dropdown.setVisibility(View.GONE);
+        resetUIElements(checkBoxes, buttons, questions.get(index).getQuestionId());
 
         // Set visibility and text for each choice
         for (int i = 0; i < choices.size(); i++) {
@@ -319,11 +453,91 @@ public class QuestionnaireFragment extends Fragment {
                 case "freeform":
                     shortResponse.setHint(((FreeFormChoice) choice).getHint() == null ?
                             "Enter a response" : ((FreeFormChoice) choice).getHint());
+                    shortResponse.setEnabled(true);
                     shortResponse.setVisibility(View.VISIBLE);
+                    break;
+                case "date":
+                    date.setText(choice.getChoice());
+                    date.setVisibility(View.VISIBLE);
+                    selectDateButton.setVisibility(View.VISIBLE);
                     break;
             }
         }
         setButtonVisibility();
+    }
+
+    private void resetUIElements(CheckBox[] checkBoxes, RadioButton[] buttons, String qid) {
+        // Reset choices
+        for (CheckBox checkbox : checkBoxes) {
+            checkbox.setChecked(false);
+        }
+        choiceGroup.clearCheck();
+        shortResponse.setText("");
+
+        date.setText("");
+        date.setVisibility(View.GONE);
+        selectDateButton.setVisibility(View.GONE);
+
+        // Set all to default invisible
+        checkboxGroup.setVisibility(View.GONE);
+        for (int i = 0; i < checkBoxes.length; i++) {
+            checkBoxes[i].setVisibility(View.GONE);
+        }
+        choiceGroup.setVisibility(View.GONE);
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].setVisibility(View.GONE);
+        }
+        shortResponse.setVisibility(View.GONE);
+        dropdown.setVisibility(View.GONE);
+
+    }
+
+    private void repopulateUI(String qid) {
+        // Set enabled based on previous results
+        DatabaseReference ref = db.getDatabase();
+        Query query = ref.orderByChild("qid").equalTo(qid);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        Map<String, Object> response = (Map<String, Object>) data.getValue();
+
+
+                        String selectedAnswer = (String) response.get("answer");
+                        if (selectedAnswer != null) {
+                            switch (selectedAnswer) {
+                                case "option1":
+                                    choice1.setChecked(true);
+                                    break;
+                                case "option2":
+                                    choice2.setChecked(true);
+                                    break;
+                                case "option3":
+                                    choice3.setChecked(true);
+                                    break;
+                                case "option4":
+                                    choice4.setChecked(true);
+                                    break;
+                            }
+                        }
+
+                        // Example for multiple-choice (checkboxes)
+                        List<String> selectedAnswers = (List<String>) response.get("answers");
+                        if (selectedAnswers != null) {
+                            checkbox1.setChecked(selectedAnswers.contains("option1"));
+                            checkbox2.setChecked(selectedAnswers.contains("option2"));
+                            // etc.
+                        }
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     // Display a question based on its ID
@@ -350,7 +564,6 @@ public class QuestionnaireFragment extends Fragment {
             nextQuestionList = null;
             questionIndex = 0;
         }
-        Toast.makeText(getContext(), Integer.toString(questionIndex), Toast.LENGTH_SHORT).show();
         setQuestionView(questionIndex, questionList);
     }
 
