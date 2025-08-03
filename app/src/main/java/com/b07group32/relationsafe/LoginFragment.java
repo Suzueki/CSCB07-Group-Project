@@ -34,7 +34,7 @@ public class LoginFragment extends Fragment {
     private static final String USER_PASSWORD_KEY = "user_password";
 
 
-    private boolean isPinLoginMode = false;
+    private boolean isPinLoginMode = true;
 
     @Nullable
     @Override
