@@ -7,6 +7,14 @@ public class PlanModel {
     String ref;
     String sub;
 
+    public PlanModel() {
+        this.tip = "";
+        this.answer = "";
+        this.qid = "";
+        this.ref = "";
+        this.sub = "";
+    }
+
     public PlanModel(String qid, String tip, String answer, String ref) {
         this.tip = tip;
         this.answer = answer;

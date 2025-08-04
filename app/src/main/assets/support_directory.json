@@ -1,0 +1,212 @@
+{
+  "Toronto": {
+    "Emergency Hotlines": [
+      {
+        "name": "Distress Centers of Greater Ontario",
+        "phone": "(416) 408-4357",
+        "description": "Year-Round Support for Crises",
+        "website": "https://www.dcogt.com/408-helpline/"
+      }
+    ],
+    "Shelters & Housing": [
+      {
+        "name": "City of Toronto - Shelters",
+        "phone": "(416) 338-4766",
+        "description": "Toronto's central page for shelters",
+        "website": "https://www.toronto.ca/community-people/housing-shelter/homeless-help/shelters/#location=&lat=&lng=&zoom="
+      }
+    ],
+    "Victim Services": [
+      {
+        "name": "Victim Services Toronto",
+        "phone": "(416) 808-7066",
+        "description": "City of Toronto's 24/7 Hotline",
+        "website": "https://www.victimservicestoronto.com/get-help"
+      }
+    ],
+    "Legal Assistance": [
+      {
+        "name": "Legal Aid Ontario",
+        "phone": "1‑800‑668‑8258",
+        "description": "A tool to find pertinent legal offices",
+        "website": "https://www.toronto.ca/community-people/housing-shelter/rental-housing-tenant-information/find-legal-help/"
+      }
+    ],
+    "Police (For emergencies - 911)": [
+      {
+        "name": "Toronto Police Service",
+        "phone": "(416) 808-2222",
+        "description": "Police Non-Emergency Line",
+        "website": "https://www.tps.ca/contact/416-808-2222-police-non-emergency/"
+      }
+    ]
+  },
+  "Calgary": {
+    "Emergency Hotlines": [
+      {
+        "name": "Distress Centre Calgary",
+        "phone": "(403) 266‑4357",
+        "description": "Calgary & Southern Alberta 24/7 crisis support line. Staffed by trained crisis responders.",
+        "website": "https://distresscentre.com/"
+      }
+    ],
+    "Shelters & Housing": [
+      {
+        "name": "Alberta - Find Shelters)",
+        "phone": "(403) 705-0315",
+        "description": "An aggregated list of shelters in Alberta",
+        "website": "https://www.alberta.ca/find-shelters"
+      }
+    ],
+    "Victim Services": [
+      {
+        "name": "Victim Assistance Support Team (VAST)",
+        "phone": "403‑428‑8398 (toll‑free 1‑888‑327‑7828)",
+        "description": "Calgary Police Service unit that offers 24/7 on‑scene crisis support, emotional help, and court information.",
+        "website": "https://www.calgary.ca/cps/community-programs-and-resources/victims-of-crime/victim-assistance-support-team.html"
+      }
+    ],
+    "Legal Assistance": [
+      {
+        "name": "Legal Aid Alberta",
+        "phone": "1-866-845-3425",
+        "description": "Province‑wide legal aid for eligible Albertans for civil, family, criminal and. immigration issues.",
+        "website": "https://www.legalaid.ab.ca/"
+      }
+    ],
+    "Police (For emergencies - 911)": [
+      {
+        "name": "Calgary Police Service (non‑emergency)",
+        "phone": "(403) 266‑1234",
+        "description": "Use this line to report non‑urgent crimes or community concerns.",
+        "website": "https://www.calgary.ca/cps/"
+      }
+    ]
+  },
+  "Vancouver": {
+    "Emergency Hotlines": [
+      {
+        "name": "BC Crisis Line (Vancouver Coastal Health)",
+        "phone": "310-6789",
+        "description": "24/7 mental health and emotional support line for BC residents.",
+        "website": "https://www.crisiscentre.bc.ca/get-support/crisis-lines/"
+      }
+    ],
+    "Shelters & Housing": [
+      {
+        "name": "City of Vancouver Homelessness Services",
+        "phone": "3‑1‑1",
+        "description": "Hub for Vancouver shelters, supportive housing, rent bank, and winter homelessness response.",
+        "website": "https://vancouver.ca/people-programs/shelters.aspx"
+      }
+    ],
+    "Victim Services": [
+      {
+        "name": "Crime Victim Assistance Program (CVAP)",
+        "phone": "604‑660‑3888",
+        "description": "Provincial support for victims of violent crime; covers counselling, temporary living or medical expenses.",
+        "website": "https://www.gov.bc.ca/crimevictimassistance"
+      }
+    ],
+    "Legal Assistance": [
+      {
+        "name": "Legal Aid BC",
+        "phone": "1‑866‑577‑2525",
+        "description": "Legal aid for low‑income B.C. residents in criminal, family, immigration and civil matters.",
+        "website": "https://legalaid.bc.ca/"
+      }
+    ],
+    "Police (For emergencies - 911)": [
+      {
+        "name": "Vancouver Police Department (non‑emergency)",
+        "phone": "604‑717‑3321",
+        "description": "Report non‑urgent incidents or concerns to this line.",
+        "website": "https://vpd.ca/report-a-crime"
+      }
+    ]
+  },
+  "Montreal": {
+    "Emergency Hotlines": [
+      {
+        "name": "Suicide Prevention Centre of Montreal",
+        "phone": "1‑866‑277‑3553",
+        "description": "Montreal‑based, bilingual 24/7 crisis line for those experiencing suicidal thoughts or emotional distress.",
+        "website": "https://cpsmontreal.ca/en/"
+      }
+    ],
+    "Shelters & Housing": [
+      {
+        "name": "Grande Montreal Gatineau",
+        "phone": "211",
+        "description": "General shelter and homelessness services.",
+        "website": "https://www.211qc.ca/itinerance/refuges-hebergement-personnes-itinerantes"
+      }
+    ],
+    "Victim Services": [
+      {
+        "name": "Centre d'aide aux victimes d'actes criminels (CAVAC)",
+        "phone": "1-(866) 532-2822",
+        "description": "Confidential line to receive assistance and support for victims of crime.",
+        "website": "https://cavac.qc.ca/en/"
+      }
+    ],
+    "Legal Assistance": [
+      {
+        "name": "Grande Montreal Gatineau",
+        "phone": "2-1-1",
+        "description": "Referral service for individuals seeking legal help or advices.",
+        "website": "https://www.211qc.ca/en/justice-and-advocacy/legal-aid"
+      }
+    ],
+    "Police (For emergencies - 911)": [
+      {
+        "name": "Service de police de la Ville de Montréal (SPVM)",
+        "phone": "514‑393‑1133",
+        "description": "Info‑Crime is used to report non‑urgent matters.",
+        "website": "https://spvm.qc.ca/en/Pages/Contact-Us"
+      }
+    ]
+  },
+  "Edmonton": {
+    "Emergency Hotlines": [
+      {
+        "name": "CMHA Edmonton Distress Line",
+        "phone": "(780) 482-4357)",
+        "description": "24/7 confidential emotional support and crisis care for Edmonton & surrounding area.",
+        "website": "https://edmonton.cmha.ca/brochure/distress-line/"
+      }
+    ],
+    "Shelters & Housing": [
+      {
+        "name": "Homeward Trust Edmonton",
+        "phone": "2‑1‑1",
+        "description": "Repository of shelters and referral to 24/7 Crisis Team",
+        "website": "https://homewardtrust.ca/sheltersandemergencyresponse/"
+      }
+    ],
+    "Victim Services": [
+      {
+        "name": "Crime & Trauma‑Informed Support Services (CTSS)",
+        "phone": "(780) 421‑2217",
+        "description": "Edmonton Police Service unit providing victim support, court guidance & community referrals.",
+        "website": "https://www.edmontonpolice.ca/VictimSupport/GettingHelp"
+      }
+    ],
+    "Legal Assistance": [
+      {
+        "name": "Legal Aid Alberta",
+        "phone": "1-(866) 845-3425",
+        "description": "Province‑wide legal aid for eligible Albertans for civil, family, criminal and. immigration issues.",
+        "website": "https://www.legalaid.ab.ca/"
+      }
+    ],
+    "Police (For emergencies - 911)": [
+      {
+        "name": "Edmonton Police Service (non‑emergency)",
+        "phone": "780‑423‑4567",
+        "description": "Call this number to report non‑urgent crimes.",
+        "website": "https://www.edmontonpolice.ca/ContactEPS"
+      }
+    ]
+  }
+}
