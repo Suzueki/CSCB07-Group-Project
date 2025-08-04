@@ -80,7 +80,6 @@
             android:layout_marginVertical="8dp"
             android:background="@drawable/rounded_corner"
             android:backgroundTint="@color/gray"
-
             android:padding="16dp"
             android:visibility="visible"
             tools:text="Choice D"
@@ -93,7 +92,7 @@
         android:orientation="vertical"
         android:id="@+id/selectMultiple"
         android:visibility="visible">
-        <!-- will ideally change colour when selected -->
+
         <CheckBox
             android:id="@+id/checkbox1"
             android:layout_width="match_parent"
@@ -175,14 +174,6 @@
         android:inputType="text"
         android:padding="16dp"
         android:textSize="16sp" />  <!-- date/text I think -->
-
-    <!-- For the cities question? Content of spinner has to be added in the java file -->
-    <Spinner
-        android:id="@+id/spinnerDropdown"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:visibility="gone"/>
 
     <AutoCompleteTextView
         android:layout_width="match_parent"

@@ -5,15 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".PlanFragment"
     android:id="@+id/planRecyclerView">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:text="Your plan"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/tips"/>
-
 </RelativeLayout>

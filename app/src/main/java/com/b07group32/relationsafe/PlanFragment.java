@@ -21,12 +21,12 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class PlanFragment extends Fragment {
+public class PlanFragment extends Fragment implements Plan_RecyclerViewInterface {
     ArrayList<PlanModel> plan = new ArrayList<>();
     DatabaseReference databaseReference;
     FirebaseUser user;
+    private Plan_RecyclerViewAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,8 +39,8 @@ public class PlanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plan, container, false);
-        RecyclerView rv = view.findViewById(R.id.tips);
-        Plan_RecyclerViewAdapter adapter = new Plan_RecyclerViewAdapter(requireContext(), plan);
+        RecyclerView rv = view.findViewById(R.id.planRecyclerView);
+        adapter = new Plan_RecyclerViewAdapter(requireContext(), plan, this);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -75,5 +75,19 @@ public class PlanFragment extends Fragment {
             }
         }
         return "";
+    }
+
+    @Override
+    public void onEditClick(int position) {
+        String mode;
+        PlanModel item = adapter.getPlanAtPosition(position);
+        String qid = item.getQid();
+        if (qid.equals("w1")) {
+            mode = "change branch";
+        } else {
+            mode = "edit";
+        }
+        Fragment fragment = QuestionnaireFragment.newInstance(mode, qid);
+        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
     }
 }
