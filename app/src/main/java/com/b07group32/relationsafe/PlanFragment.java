@@ -87,7 +87,7 @@ public class PlanFragment extends Fragment implements Plan_RecyclerViewInterface
         } else {
             mode = "edit";
         }
-        // Fragment fragment = QuestionnaireFragment.newInstance(mode, qid);
-        // getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+        Fragment fragment = QuestionnaireFragment.newInstance(mode, qid);
+        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
     }
 }
