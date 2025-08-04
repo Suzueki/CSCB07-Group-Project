@@ -6,7 +6,6 @@
     tools:context=".PlanFragment"
     android:id="@+id/planRecyclerView">
 
-    <!--  -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

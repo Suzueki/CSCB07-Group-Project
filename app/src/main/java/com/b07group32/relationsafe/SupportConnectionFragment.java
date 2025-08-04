@@ -151,21 +151,29 @@ public class SupportConnectionFragment extends Fragment {
 
     private void loadUserCity() {
         if (currentUser != null) {
-
-            DatabaseReference userCityRef = databaseRef.child("users")
+            // First, get all plans for the user to find the city question
+            DatabaseReference userPlansRef = databaseRef.child("users")
                     .child(currentUser.getUid())
-                    .child("questionnaire")
-                    .child("city");
+                    .child("plan");
 
-            userCityRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            userPlansRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String foundCity = null;
 
-                    if (snapshot.exists()) {
-                        userCity = snapshot.getValue(String.class);
-                        if (userCity == null) {
-                            userCity = "Toronto";
+                    // Look through all plans to find the one with question ID "w2" (city question)
+                    for (DataSnapshot planSnapshot : snapshot.getChildren()) {
+                        String qid = planSnapshot.child("qid").getValue(String.class);
+                        if ("w2".equals(qid)) { // Based on your Firebase data, "w2" seems to be the city question
+                            foundCity = planSnapshot.child("answer").getValue(String.class);
+                            break;
                         }
+                    }
+
+                    if (foundCity != null) {
+                        userCity = foundCity;
+                    } else {
+                        userCity = "Toronto"; // Fallback to default
                     }
 
                     Log.d(TAG, "User city loaded: " + userCity);
@@ -176,7 +184,8 @@ public class SupportConnectionFragment extends Fragment {
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e(TAG, "Failed to load user city", error.toException());
                     Toast.makeText(getContext(), "Failed to load city information", Toast.LENGTH_SHORT).show();
-                    displaySupportServices(); // Display with default city
+                    userCity = "Toronto"; // Fallback to default
+                    displaySupportServices();
                 }
             });
         } else {

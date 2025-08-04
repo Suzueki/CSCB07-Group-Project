@@ -39,7 +39,7 @@ public class PlanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plan, container, false);
-        RecyclerView rv = view.findViewById(R.id.planRecyclerView);
+        RecyclerView rv = view.findViewById(R.id.tips);
         Plan_RecyclerViewAdapter adapter = new Plan_RecyclerViewAdapter(requireContext(), plan);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));

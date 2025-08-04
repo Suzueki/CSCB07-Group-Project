@@ -23,6 +23,13 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) { loadFragment(new QuestionnaireFragment());}
         });
 
+        CardView buttonPlan = view.findViewById(R.id.buttonPlans);
+
+        buttonPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { loadFragment(new PlanFragment());}
+        });
+
         CardView buttonSupportConnection = view.findViewById(R.id.buttonSupportCenter);
 
         buttonSupportConnection.setOnClickListener(new View.OnClickListener() {
