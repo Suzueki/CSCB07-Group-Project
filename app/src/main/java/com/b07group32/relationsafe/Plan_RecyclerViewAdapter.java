@@ -41,26 +41,6 @@ public class Plan_RecyclerViewAdapter extends RecyclerView.Adapter<Plan_Recycler
        text = tip.replace("{sub}", sub);
 
        holder.tvTip.setText(text);
-       holder.editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int pos = holder.getAdapterPosition();
-                if (pos != RecyclerView.NO_POSITION) {
-                    String qid = plan.get(pos).getQid();
-                    String mode;
-                    if (qid.equals("w1")) {
-                        mode = "change branch";
-                    } else {
-                        mode = "edit";
-                    }
-//                    Fragment fragment = QuestionnaireFragment.newInstance(mode, qid);
-//                    FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
-//                    fragmentTransaction.replace(R.id.fragment_container, fragment);
-//                    fragmentTransaction.addToBackStack(null);
-//                    fragmentTransaction.commit();
-                }
-            }
-        });
     }
 
     @Override
@@ -70,12 +50,10 @@ public class Plan_RecyclerViewAdapter extends RecyclerView.Adapter<Plan_Recycler
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvTip;
-        Button editBtn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTip = itemView.findViewById(R.id.tipContent);
-            editBtn = itemView.findViewById(R.id.editButton);
         }
     }
 }
