@@ -41,6 +41,7 @@ public class QuestionnaireFragment extends Fragment {
     // Constants for fragment arguments
     private static final String ARG_MODE = "mode";
     private static final String ARG_QUESTION_ID = "question_id";
+    public static final String DATE_DEFAULT_TEXT = "Enter a date";
 
     // Instance variables for fragment arguments
     private String mode;
@@ -322,6 +323,7 @@ public class QuestionnaireFragment extends Fragment {
         String qid = questionList.get(questionIndex).getQuestionId();
         String answer = "";
         String tip = "";
+        String textAnswer = "";
 
         RadioButton[] buttons = {choice1, choice2, choice3, choice4};
         CheckBox[] checkBoxes = {checkbox1, checkbox2, checkbox3, checkbox4};
@@ -350,7 +352,7 @@ public class QuestionnaireFragment extends Fragment {
         }
         if (shortResponse.getVisibility() == View.VISIBLE) {
             //answer = answer.concat(shortResponse.getText().toString());
-            answer = answer + " " + shortResponse.getText().toString();
+            textAnswer = shortResponse.getText().toString();
             tip = TipSearcher.findMatchingTip(tips, questionList.get(questionIndex).getQuestionId(), answer);
         }
         if (dropdown.getVisibility() == View.VISIBLE) {
@@ -359,16 +361,16 @@ public class QuestionnaireFragment extends Fragment {
         }
         if (date.getVisibility() == View.VISIBLE) {
             answer = date.getText().toString();
+            if (answer.equals(DATE_DEFAULT_TEXT)) answer = "";
             tip = TipSearcher.findMatchingTip(tips, questionList.get(questionIndex).getQuestionId(), answer);
         }
 
         // Add to db
-        if (answer.isBlank()) {
+        if (answer.isBlank() && textAnswer.isBlank()) {
             return;
         }
         if (tip != null && !tip.isBlank()) {
-            String[] answerParts = answer.split(" ");
-            tip = tip.replace("{answer}", answerParts.length == 2 ? answerParts[1] : answer);
+            tip = tip.replace("{answer}", textAnswer.isBlank() ? answer : textAnswer);
         }
         response.put("qid", qid);
         response.put("answer", answer);

@@ -10,11 +10,9 @@ public class TipSearcher {
                 for (TipContainer.Tip tip : container.getTips()) {
                     if (tip.getResponse() != null && tip.getResponse().equals(response)) {
                         return tip.getTip();
-                    } else { // If tip response is empty, assumed to be single tip for all responses
-                        return tip.getTip();
                     }
                 }
-                break;
+                return container.getTips().get(0).getTip(); // Default to first tip if no matching response is found
             }
         }
         return null;
