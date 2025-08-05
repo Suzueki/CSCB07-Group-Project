@@ -23,5 +23,10 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.example.relationsafe", appContext.getPackageName());
     }
+
+    public void login()
+    {
+
+    }
 }
 

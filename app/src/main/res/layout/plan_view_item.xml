@@ -16,13 +16,5 @@
         tools:text="placeholder tip"
         android:textColor="@color/black"
         android:textSize="20sp"/>
-    <Button
-        android:id="@+id/editButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit"
-        android:layout_below="@+id/tipContent"
-        android:background="@drawable/rounded_corner"
-        android:backgroundTint="@color/blue"
-        android:layout_alignParentEnd="true"/>
+
 </RelativeLayout>

@@ -53,22 +53,10 @@ public class Plan_RecyclerViewAdapter extends RecyclerView.Adapter<Plan_Recycler
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvTip;
-        Button editBtn;
         public MyViewHolder(@NonNull View itemView, Plan_RecyclerViewInterface planInterface) {
             super(itemView);
             tvTip = itemView.findViewById(R.id.tipContent);
-            editBtn = itemView.findViewById(R.id.editButton);
-            editBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (planInterface != null) {
-                        int pos = getAdapterPosition();
-                        if (pos != RecyclerView.NO_POSITION) {
-                            planInterface.onEditClick(pos);
-                        }
-                    }
-                }
-            });
+
         }
     }
 }
