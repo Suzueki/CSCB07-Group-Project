@@ -352,7 +352,10 @@ public class QuestionnaireFragment extends Fragment {
         }
         if (shortResponse.getVisibility() == View.VISIBLE) {
             //answer = answer.concat(shortResponse.getText().toString());
-            textAnswer = shortResponse.getText().toString();
+            if (answer.isBlank())
+                answer = shortResponse.getText().toString();
+            else
+                textAnswer = shortResponse.getText().toString();
             tip = TipSearcher.findMatchingTip(tips, questionList.get(questionIndex).getQuestionId(), answer);
         }
         if (dropdown.getVisibility() == View.VISIBLE) {
