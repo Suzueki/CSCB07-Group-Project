@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 
@@ -24,13 +25,11 @@ public class AlarmReceiver extends BroadcastReceiver{
     private final String logTag = "AlarmReceiver";
     @Override
     public void onReceive(Context context, Intent intent) {
-//        Log.d(logTag, "Received request");
         notifManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         deliverNotification(context);
         long intervalMS = intent.getLongExtra("interval", 0);
         int pendingID = intent.getIntExtra("id", 0);
-//        Log.d(logTag, pendingID+" "+intervalMS);
         long nextTrigger = System.currentTimeMillis() + intervalMS;
         Intent repeatIntent = new Intent(context, AlarmReceiver.class);
         repeatIntent.putExtra("interval", intervalMS);
@@ -41,7 +40,6 @@ public class AlarmReceiver extends BroadcastReceiver{
     }
 
     private void deliverNotification(Context context) {
-//        Log.d(logTag, "Notification queued");
         Intent contentIntent = new Intent(context, ScheduleFragment.class);
         PendingIntent contentPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, contentIntent, PendingIntent.FLAG_IMMUTABLE);
         createChannel(context);
@@ -59,9 +57,10 @@ public class AlarmReceiver extends BroadcastReceiver{
         NotificationCompat.Builder notification = new NotificationCompat.Builder(context, channelID)
                 .setContentIntent(contentIntent)
                 .setSmallIcon(R.drawable.ic_notification)
+                .setColor(Color.YELLOW)
+                .setColorized(true)
                 .setContentTitle("Reminder")
                 .setContentText("Don't forget to update your weekend plans!")
-                .setColor(ContextCompat.getColor(context, R.color.black))
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
         notificationManager.notify(NOTIFICATION_ID, notification.build());
     }

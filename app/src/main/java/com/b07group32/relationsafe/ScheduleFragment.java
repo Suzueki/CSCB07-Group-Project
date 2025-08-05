@@ -77,7 +77,7 @@ public class ScheduleFragment extends Fragment {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        alarmManager = (AlarmManager) requireContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
         Button buttonSendReminder = view.findViewById(R.id.buttonSendNotification);
         buttonSendReminder.setOnClickListener(v -> {
@@ -141,14 +141,14 @@ public class ScheduleFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item,
                 periodOptions);
         periodSpinner.setAdapter(periodAdapter);
-        final String[] selectedOption = {options[0]};
+//        final String[] selectedOption = {options[0]};
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedOption[0] = options[position];
+                String selectedOption = options[position];
 
-                if(selectedOption[0].equals("Custom")){
+                if(selectedOption.equals("Custom")){
                     periodSpinner.setVisibility(View.VISIBLE);
                     customText.setVisibility(View.VISIBLE);
 
@@ -167,60 +167,60 @@ public class ScheduleFragment extends Fragment {
             }
         });
         new AlertDialog.Builder(getContext())
-                .setTitle("Choose how often you'd like to be reminded")
-                .setView(dialogView)
-                .setPositiveButton("OK", (dialog, which) -> {
-                    String selected = spinner.getSelectedItem().toString();
-                    String period;
-                    int amount = 1;
-                    long intervalMS = TimeUnit.DAYS.toMillis(1L);
-                    period = "Day(s)";
-                    switch (selected) {
-                        case "Weekly":
-                            intervalMS = TimeUnit.DAYS.toMillis(7L);
-                            period = "Week(s)";
-                            break;
-                        case "Monthly":
-                            intervalMS = TimeUnit.DAYS.toMillis(30L);
-                            period = "Month(s)";
-                            break;
-                        case "Custom":
-                            String unit = periodSpinner.getSelectedItem().toString();
-                            period = unit;
-                            if(customText.getText().toString().isEmpty()){
-                                Toast.makeText(getContext(), "Error: amount cannot be empty", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            amount = Integer.parseInt(customText.getText().toString());
+            .setTitle("Choose how often you'd like to be reminded")
+            .setView(dialogView)
+            .setPositiveButton("OK", (dialog, which) -> {
+                String selected = spinner.getSelectedItem().toString();
+                String period;
+                int amount = 1;
+                long intervalMS = TimeUnit.DAYS.toMillis(1L);
+                period = "Day(s)";
+                switch (selected) {
+                    case "Weekly":
+                        intervalMS = TimeUnit.DAYS.toMillis(7L);
+                        period = "Week(s)";
+                        break;
+                    case "Monthly":
+                        intervalMS = TimeUnit.DAYS.toMillis(30L);
+                        period = "Month(s)";
+                        break;
+                    case "Custom":
+                        String unit = periodSpinner.getSelectedItem().toString();
+                        period = unit;
+                        if(customText.getText().toString().isEmpty()){
+                            Toast.makeText(getContext(), "Error: amount cannot be empty", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        amount = Integer.parseInt(customText.getText().toString());
 
-                            if (unit.equals("Day(s)")) {
-                                intervalMS = TimeUnit.DAYS.toMillis(amount);
+                        if (unit.equals("Day(s)")) {
+                            intervalMS = TimeUnit.DAYS.toMillis(amount);
 //                                period = "Day(s)";
-                            }
-                            if (unit.equals("Week(s)")) {
-                                intervalMS = TimeUnit.DAYS.toMillis(amount * 7L);
+                        }
+                        if (unit.equals("Week(s)")) {
+                            intervalMS = TimeUnit.DAYS.toMillis(amount * 7L);
 //                                period = "Week(s)";
-                            }
-                            if (unit.equals("Month(s)")) {
-                                Log.d("ScheduleFragment", "yo this is working");
-                                intervalMS = TimeUnit.DAYS.toMillis(amount * 30L);
+                        }
+                        if (unit.equals("Month(s)")) {
+                            Log.d("ScheduleFragment", "yo this is working");
+                            intervalMS = TimeUnit.DAYS.toMillis(amount * 30L);
 //                                period = "Month(s)";
-                            }
-                            if (unit.equals("Year(s)")) {
-                                intervalMS = TimeUnit.DAYS.toMillis(amount * 365L);
+                        }
+                        if (unit.equals("Year(s)")) {
+                            intervalMS = TimeUnit.DAYS.toMillis(amount * 365L);
 //                                period = "Year(s)";
-                            }
-                            break;
-                    }
+                        }
+                        break;
+                }
 
-                    long finalInterval = intervalMS;
-                    String finalPeriod = period;
-                    int finalAmount = Math.max(1, amount);
+                long finalInterval = intervalMS;
+                String finalPeriod = period;
+                int finalAmount = Math.max(1, amount);
 
 //                    notifyIntent.putExtra("interval", finalInterval);
 //                    notifyPendingIntent = PendingIntent.getBroadcast(requireContext(), NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_IMMUTABLE);
 //                    Log.d("ScheduleFragment", ""+notifyIntent.getLongExtra("interval", 0));
-                    showDateTimePicker(getParentFragmentManager(), dateTime->{
+                showDateTimePicker(getParentFragmentManager(), dateTime->{
 
 //                        Log.d("ScheduleFragment", "Interval: "+finalInterval);
 //                        Log.d("ScheduleFragment", "Current time in ms: "+LocalDateTime.now());
@@ -229,63 +229,73 @@ public class ScheduleFragment extends Fragment {
 //                        Log.d("ScheduleFragment", "Initial hour in ms: "+dateTime.getHour());
 //                        Log.d("ScheduleFragment", "Initial minute in ms: "+dateTime.getMinute());
 
-                        Calendar cal = getCalendar(dateTime);
-                        if(cal.getTimeInMillis() < System.currentTimeMillis()){
-                            Toast.makeText(getContext(), "Error: time picked must be in future", Toast.LENGTH_LONG).show();
-                            return;
-                        }
+                    Calendar cal = getCalendar(dateTime);
+                    if(cal.getTimeInMillis() < System.currentTimeMillis()){
+                        Toast.makeText(getContext(), "Error: time picked must be in future", Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
 
-                        if (alarmManager != null) {
+                    if (alarmManager != null) {
 //                            Log.d("ScheduleFragment", ""+cal.getTimeInMillis());
 //                            Log.d("ScheduleFragment", "Trigger at millis: " + cal.getTimeInMillis() + ", Current: " + System.currentTimeMillis());
 //                            Log.d("ScheduleFragment", "onCheckedChanged: AlarmManager!=null - Start of alarm manager")
 
-                            Notification notif;
-                            if(id == 0) {
-                                notif = new Notification(notifications.size()+1, cal, finalInterval, requireContext(), finalPeriod, finalAmount);
-                                notifications.add(notif);
-                                addToTable(notif);
-                                Toast.makeText(getContext(), "Reminder successfully scheduled", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                 notif = notifications.get(id-1);
-                                 notif.setCal(cal);
-                                 notif.setInterval(finalInterval);
-                                 notif.setPeriod(finalPeriod);
-                                notif.setAmount(finalAmount);
-                                Toast.makeText(getContext(), "Reload screen to see changes", Toast.LENGTH_SHORT).show();
-                            }
-                            queueNotification(notif);
-                            saveNotifications();
+                        Notification notif;
+                        if(id == 0) {
+                            notif = new Notification(notifications.size()+1, cal, finalInterval, requireContext(), finalPeriod, finalAmount);
+                            notifications.add(notif);
+                            addToTable(notif);
+                            Toast.makeText(getContext(), "Reminder successfully scheduled", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                             notif = notifications.get(id-1);
+                             notif.setCal(cal);
+                             notif.setInterval(finalInterval);
+                             notif.setPeriod(finalPeriod);
+                            notif.setAmount(finalAmount);
+                            Toast.makeText(getContext(), "Reload screen to see changes", Toast.LENGTH_SHORT).show();
+                        }
+                        queueNotification(notif);
+                        saveNotifications();
 //                            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), notifyPendingIntent);
 //                            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis()+5000, notifyPendingIntent);
-                        }
-                        Log.d("ScheduleFragment", "Alarm setRepeating() succeeded");
-                    });
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+                    }
+//                        Log.d("ScheduleFragment", "Alarm setRepeating() succeeded");
+                });
+            })
+            .setNegativeButton("Cancel", null)
+            .show();
     }
 
     private void queueNotification(Notification n){
-        Intent temp_intent = new Intent(requireContext(), AlarmReceiver.class);
-        temp_intent.putExtra("interval", n.getInterval());
-        temp_intent.putExtra("id", n.getNotificationID());
-        PendingIntent temp_PendingIntent = PendingIntent.getBroadcast(requireContext(), n.getNotificationID(), temp_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+//        Intent temp_intent = new Intent(requireContext(), AlarmReceiver.class);
+//        temp_intent.putExtra("interval", n.getInterval());
+//        temp_intent.putExtra("id", n.getNotificationID());
+//        PendingIntent temp_PendingIntent = PendingIntent.getBroadcast(requireContext(), n.getNotificationID(), temp_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent temp_PendingIntent = createTempIntent(n);
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, n.getCal().getTimeInMillis(), temp_PendingIntent);
+        Log.d("ScheduleFragment", "Trigger at millis: " + n.getCal().getTimeInMillis() + ", Current: " + System.currentTimeMillis());
+        Log.d("ScheduleFragment", "notification queued");
     }
 
     private void dequeueNotification(Notification n){
-        Intent temp_intent = new Intent(requireContext(), AlarmReceiver.class);
-        temp_intent.putExtra("interval", n.getInterval());
-        temp_intent.putExtra("id", n.getNotificationID());
-        PendingIntent temp_PendingIntent = PendingIntent.getBroadcast(requireContext(), n.getNotificationID(), temp_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+//        Intent temp_intent = new Intent(requireContext(), AlarmReceiver.class);
+//        temp_intent.putExtra("interval", n.getInterval());
+//        temp_intent.putExtra("id", n.getNotificationID());
+//        PendingIntent temp_PendingIntent = PendingIntent.getBroadcast(requireContext(), n.getNotificationID(), temp_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent temp_PendingIntent = createTempIntent(n);
         if(alarmManager != null)
             alarmManager.cancel(temp_PendingIntent);
     }
 
-    @SuppressLint("SetTextI14n")
+    private PendingIntent createTempIntent(Notification n){
+        Intent temp_intent = new Intent(requireContext(), AlarmReceiver.class);
+        temp_intent.putExtra("interval", n.getInterval());
+        temp_intent.putExtra("id", n.getNotificationID());
+        return PendingIntent.getBroadcast(requireContext(), n.getNotificationID(), temp_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+    }
+    @SuppressLint("SetTextI18n")
     public void addToTable(Notification n){
         TableRow tableRow = new TableRow(requireContext());
         TextView nameCell = new TextView(requireContext());
@@ -341,8 +351,6 @@ public class ScheduleFragment extends Fragment {
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
         }
-        Log.d("Calendar", "in calendar: "+cal.MONTH);
-        Log.d("Calendar", "in calendar: "+cal.DAY_OF_MONTH);
         return cal;
     }
 
