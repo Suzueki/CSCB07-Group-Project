@@ -1,4 +1,6 @@
 package com.b07group32.relationsafe;
+import static com.b07group32.relationsafe.QuestionLoader.gson;
+
 import android.app.DatePickerDialog;
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -31,6 +33,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -133,7 +137,8 @@ public class QuestionnaireFragment extends Fragment {
         shortResponse = view.findViewById(R.id.shortResponse);
         // Autocomplete Dropdown
         final String[] city = new String[1]; // acts like a mutable container
-        ArrayList<String> cities = new ArrayList<>(); //store cities into here from JSON
+        ArrayList<String> cities = new ArrayList<>();
+        cities = loadCities();
         dropdown = view.findViewById(R.id.dropdown);
 
         date = view.findViewById(R.id.dateText);
@@ -179,12 +184,7 @@ public class QuestionnaireFragment extends Fragment {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, cities);
         dropdown.setAdapter(adapter);
-        dropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                city[0] = adapter.getItem(position).toString();
-            }
-        });
+        dropdown.setOnItemClickListener((parent, view1, position, id) -> city[0] = adapter.getItem(position).toString());
         dropdown.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -219,6 +219,17 @@ public class QuestionnaireFragment extends Fragment {
         questionRoute = planningToLeaveQuestions;
 
         return view;
+    }
+
+    private ArrayList<String> loadCities() { // bad
+        try {
+            InputStream is = getContext().getAssets().open("Cities.json");
+            InputStreamReader isr = new InputStreamReader(is);
+            return gson.fromJson(isr, ArrayList.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     private void handleModeAndQuestionId() {
