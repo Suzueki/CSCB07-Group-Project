@@ -157,7 +157,7 @@ public class LoginPresenter implements LoginContract.Presenter {
         }
     }
 
-    private void checkInitialLoginMode() {
+    public void checkInitialLoginMode() {
         model.checkIfPinIsSet(new LoginContract.Model.PinCallback() {
             @Override
             public void onResult(boolean isPinSet) {
@@ -179,29 +179,29 @@ public class LoginPresenter implements LoginContract.Presenter {
         });
     }
 
-    private void switchToPinLogin() {
+    public void switchToPinLogin() {
         isPinLoginMode = true;
         showPinLogin();
     }
 
-    private void switchToEmailLogin() {
+    public void switchToEmailLogin() {
         isPinLoginMode = false;
         showEmailPasswordLogin();
     }
 
-    private void showEmailPasswordLogin() {
+    public void showEmailPasswordLogin() {
         view.showEmailPasswordLogin();
         view.showPinSwitchOption(true);
         view.showEmailSwitchOption(false);
     }
 
-    private void showPinLogin() {
+    public void showPinLogin() {
         view.showPinLogin();
         view.showPinSwitchOption(false);
         view.showEmailSwitchOption(true);
     }
 
-    private void checkPinStatus() {
+    public void checkPinStatus() {
         model.checkIfPinIsSet(new LoginContract.Model.PinCallback() {
             @Override
             public void onResult(boolean isPinSet) {
