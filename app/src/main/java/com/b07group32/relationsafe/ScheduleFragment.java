@@ -122,7 +122,6 @@ public class ScheduleFragment extends Fragment {
         }
     }
     public void queryUser(int id){
-//        notifManager =  (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View dialogView = inflater.inflate(R.layout.period_dialog, null);
         Spinner spinner = dialogView.findViewById(R.id.customSpinner);
@@ -141,18 +140,14 @@ public class ScheduleFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item,
                 periodOptions);
         periodSpinner.setAdapter(periodAdapter);
-//        final String[] selectedOption = {options[0]};
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedOption = options[position];
-
                 if(selectedOption.equals("Custom")){
                     periodSpinner.setVisibility(View.VISIBLE);
                     customText.setVisibility(View.VISIBLE);
-
-//                    selectedPeriodOption[0] = periodOptions[position];
                 }
                 else{
                     periodSpinner.setVisibility(View.GONE);
@@ -195,20 +190,15 @@ public class ScheduleFragment extends Fragment {
 
                         if (unit.equals("Day(s)")) {
                             intervalMS = TimeUnit.DAYS.toMillis(amount);
-//                                period = "Day(s)";
                         }
                         if (unit.equals("Week(s)")) {
                             intervalMS = TimeUnit.DAYS.toMillis(amount * 7L);
-//                                period = "Week(s)";
                         }
                         if (unit.equals("Month(s)")) {
-                            Log.d("ScheduleFragment", "yo this is working");
                             intervalMS = TimeUnit.DAYS.toMillis(amount * 30L);
-//                                period = "Month(s)";
                         }
                         if (unit.equals("Year(s)")) {
                             intervalMS = TimeUnit.DAYS.toMillis(amount * 365L);
-//                                period = "Year(s)";
                         }
                         break;
                 }
@@ -217,30 +207,14 @@ public class ScheduleFragment extends Fragment {
                 String finalPeriod = period;
                 int finalAmount = Math.max(1, amount);
 
-//                    notifyIntent.putExtra("interval", finalInterval);
-//                    notifyPendingIntent = PendingIntent.getBroadcast(requireContext(), NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_IMMUTABLE);
-//                    Log.d("ScheduleFragment", ""+notifyIntent.getLongExtra("interval", 0));
                 showDateTimePicker(getParentFragmentManager(), dateTime->{
-
-//                        Log.d("ScheduleFragment", "Interval: "+finalInterval);
-//                        Log.d("ScheduleFragment", "Current time in ms: "+LocalDateTime.now());
-//                        Log.d("ScheduleFragment", "Desired time in ms: "+dateTime);
-//                        Log.d("ScheduleFragment", "Initial day in ms: "+dateTime.getDayOfYear());
-//                        Log.d("ScheduleFragment", "Initial hour in ms: "+dateTime.getHour());
-//                        Log.d("ScheduleFragment", "Initial minute in ms: "+dateTime.getMinute());
-
                     Calendar cal = getCalendar(dateTime);
                     if(cal.getTimeInMillis() < System.currentTimeMillis()){
                         Toast.makeText(getContext(), "Error: time picked must be in future", Toast.LENGTH_LONG).show();
                         return;
                     }
 
-
                     if (alarmManager != null) {
-//                            Log.d("ScheduleFragment", ""+cal.getTimeInMillis());
-//                            Log.d("ScheduleFragment", "Trigger at millis: " + cal.getTimeInMillis() + ", Current: " + System.currentTimeMillis());
-//                            Log.d("ScheduleFragment", "onCheckedChanged: AlarmManager!=null - Start of alarm manager")
-
                         Notification notif;
                         if(id == 0) {
                             notif = new Notification(notifications.size()+1, cal, finalInterval, requireContext(), finalPeriod, finalAmount);
@@ -258,10 +232,7 @@ public class ScheduleFragment extends Fragment {
                         }
                         queueNotification(notif);
                         saveNotifications();
-//                            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), notifyPendingIntent);
-//                            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis()+5000, notifyPendingIntent);
                     }
-//                        Log.d("ScheduleFragment", "Alarm setRepeating() succeeded");
                 });
             })
             .setNegativeButton("Cancel", null)
@@ -269,10 +240,6 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void queueNotification(Notification n){
-//        Intent temp_intent = new Intent(requireContext(), AlarmReceiver.class);
-//        temp_intent.putExtra("interval", n.getInterval());
-//        temp_intent.putExtra("id", n.getNotificationID());
-//        PendingIntent temp_PendingIntent = PendingIntent.getBroadcast(requireContext(), n.getNotificationID(), temp_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         PendingIntent temp_PendingIntent = createTempIntent(n);
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, n.getCal().getTimeInMillis(), temp_PendingIntent);
         Log.d("ScheduleFragment", "Trigger at millis: " + n.getCal().getTimeInMillis() + ", Current: " + System.currentTimeMillis());
@@ -280,10 +247,6 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void dequeueNotification(Notification n){
-//        Intent temp_intent = new Intent(requireContext(), AlarmReceiver.class);
-//        temp_intent.putExtra("interval", n.getInterval());
-//        temp_intent.putExtra("id", n.getNotificationID());
-//        PendingIntent temp_PendingIntent = PendingIntent.getBroadcast(requireContext(), n.getNotificationID(), temp_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         PendingIntent temp_PendingIntent = createTempIntent(n);
         if(alarmManager != null)
             alarmManager.cancel(temp_PendingIntent);
