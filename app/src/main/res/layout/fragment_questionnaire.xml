@@ -178,13 +178,20 @@
     <AutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dropdown"
         android:hint="Enter a city"
         android:layout_marginVertical="8dp"
         android:background="@drawable/rounded_corner"
         android:backgroundTint="@color/gray"
         android:padding="16dp"
-        android:drawableEnd = "@drawable/ic_dropdown"/>
+        android:drawableEnd = "@drawable/ic_dropdown"
+        android:visibility="gone"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:layout_marginVertical="8dp"
+        android:id="@+id/dropdown"/>
 
 
     <!-- back, next, and submit buttons -->

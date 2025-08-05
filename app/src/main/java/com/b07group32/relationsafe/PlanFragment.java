@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class PlanFragment extends Fragment implements Plan_RecyclerViewInterface {
+public class PlanFragment extends Fragment {
     ArrayList<PlanModel> plan = new ArrayList<>();
     DatabaseReference databaseReference;
     FirebaseUser user;
@@ -40,7 +40,7 @@ public class PlanFragment extends Fragment implements Plan_RecyclerViewInterface
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plan, container, false);
         RecyclerView rv = view.findViewById(R.id.tips);
-        adapter = new Plan_RecyclerViewAdapter(requireContext(), plan, this);
+        adapter = new Plan_RecyclerViewAdapter(requireContext(), plan);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -75,19 +75,5 @@ public class PlanFragment extends Fragment implements Plan_RecyclerViewInterface
             }
         }
         return "";
-    }
-
-    @Override
-    public void onEditClick(int position) {
-        String mode;
-        PlanModel item = adapter.getPlanAtPosition(position);
-        String qid = item.getQid();
-        if (qid.equals("w1")) {
-            mode = "change branch";
-        } else {
-            mode = "edit";
-        }
-        Fragment fragment = QuestionnaireFragment.newInstance(mode, qid);
-        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
     }
 }

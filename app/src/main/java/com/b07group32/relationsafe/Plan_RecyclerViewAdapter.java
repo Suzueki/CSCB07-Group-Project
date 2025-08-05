@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,12 +13,9 @@ import java.util.ArrayList;
 public class Plan_RecyclerViewAdapter extends RecyclerView.Adapter<Plan_RecyclerViewAdapter.MyViewHolder>{
     Context context;
     ArrayList<PlanModel> plan;
-
-    private final Plan_RecyclerViewInterface planInterface;
-    public Plan_RecyclerViewAdapter(Context context, ArrayList<PlanModel> plan, Plan_RecyclerViewInterface planInterface) {
+    public Plan_RecyclerViewAdapter(Context context, ArrayList<PlanModel> plan) {
         this.context = context;
         this.plan = plan;
-        this.planInterface = planInterface;
     }
 
     @NonNull
@@ -28,7 +24,7 @@ public class Plan_RecyclerViewAdapter extends RecyclerView.Adapter<Plan_Recycler
     public Plan_RecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.plan_view_item, parent, false);
-        return new Plan_RecyclerViewAdapter.MyViewHolder(view, planInterface);
+        return new Plan_RecyclerViewAdapter.MyViewHolder(view);
     }
 
     @Override
@@ -47,28 +43,11 @@ public class Plan_RecyclerViewAdapter extends RecyclerView.Adapter<Plan_Recycler
         return plan.size();
     }
 
-    public PlanModel getPlanAtPosition(int position) {
-        return plan.get(position);
-    }
-
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvTip;
-        Button editBtn;
-        public MyViewHolder(@NonNull View itemView, Plan_RecyclerViewInterface planInterface) {
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTip = itemView.findViewById(R.id.tipContent);
-            editBtn = itemView.findViewById(R.id.editButton);
-            editBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (planInterface != null) {
-                        int pos = getAdapterPosition();
-                        if (pos != RecyclerView.NO_POSITION) {
-                            planInterface.onEditClick(pos);
-                        }
-                    }
-                }
-            });
         }
     }
 }
