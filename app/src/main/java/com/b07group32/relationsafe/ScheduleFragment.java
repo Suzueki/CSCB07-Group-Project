@@ -92,10 +92,6 @@ public class ScheduleFragment extends Fragment {
         });
         tableLayout = view.findViewById(R.id.tableID);
         loadNotifications();
-        Log.d("NotificationList", ""+notifications.size());
-        for(int i = 0; i<notifications.size(); i++){
-            Log.d("NotificationList", ""+notifications.get(i).getNotificationID());
-        }
         return view;
     }
 
@@ -242,8 +238,6 @@ public class ScheduleFragment extends Fragment {
     private void queueNotification(Notification n){
         PendingIntent temp_PendingIntent = createTempIntent(n);
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, n.getCal().getTimeInMillis(), temp_PendingIntent);
-        Log.d("ScheduleFragment", "Trigger at millis: " + n.getCal().getTimeInMillis() + ", Current: " + System.currentTimeMillis());
-        Log.d("ScheduleFragment", "notification queued");
     }
 
     private void dequeueNotification(Notification n){
@@ -293,8 +287,7 @@ public class ScheduleFragment extends Fragment {
                 Toast.makeText(getContext(), "Reminder successfully cancelled", Toast.LENGTH_SHORT).show();
                 for(int i = 0; i<notifications.size(); i++) {
                     dequeueNotification(notifications.get(i));
-                    int pastID = notifications.get(i).getNotificationID();
-                    notifications.get(i).setNotificationID(pastID-1);
+                    notifications.get(i).setNotificationID(i+1);
                     queueNotification(notifications.get(i));
                 }
                 saveNotifications();
