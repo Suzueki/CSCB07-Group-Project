@@ -34,13 +34,14 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference myRef = db.getReference("testDemo");
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signOut();
 
         if (auth.getCurrentUser() == null) {
-            loadFragment(new HomeFragment());
-            bottomNavigationView.setVisibility(View.VISIBLE);
-        } else {
             loadFragment(new LoginFragment());
             bottomNavigationView.setVisibility(View.GONE);
+        } else {
+            loadFragment(new HomeFragment());
+            bottomNavigationView.setVisibility(View.VISIBLE);
         }
 
         setupEmergencyExitFAB();
