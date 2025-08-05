@@ -53,7 +53,7 @@ public class Plan_RecyclerViewAdapter extends RecyclerView.Adapter<Plan_Recycler
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvTip;
-
+        Button editBtn;
         public MyViewHolder(@NonNull View itemView, Plan_RecyclerViewInterface planInterface) {
             super(itemView);
             tvTip = itemView.findViewById(R.id.tipContent);
