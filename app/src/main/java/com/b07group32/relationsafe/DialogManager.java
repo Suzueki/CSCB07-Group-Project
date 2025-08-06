@@ -21,6 +21,7 @@ class DialogManager
         this.simpleItemCallback = simpleItemCallback;
     }
 
+    // Could be factored but elected not to because the types of additions would likely be different in the future
     public void showDocumentDialog()
     {
         FormBuilder.DocumentForm form = FormBuilder.createDocumentForm(fragment.getContext());
@@ -134,6 +135,8 @@ class DialogManager
         return true;
     }
 
+    // Ask the user if they REALLY want to delete something, in case they only have one copy
+    // We assume we're their only storage service so it must be important for them
     public static void showDeleteConfirmDialog(Context context, String itemType, Runnable deleteAction) {
         new AlertDialog.Builder(context)
                 .setTitle("Delete " + itemType)

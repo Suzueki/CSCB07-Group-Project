@@ -551,6 +551,7 @@ public class ItemViewerFragment extends Fragment
         }
     }
 
+    //UI slop
     private void addField(String key, String label, boolean multiline)
     {
         // Create label
@@ -664,7 +665,7 @@ public class ItemViewerFragment extends Fragment
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, currentFileName);
                 request.setAllowedOverMetered(true);
-                request.setAllowedOverRoaming(true);
+                request.setAllowedOverRoaming(true); //This came up once on the bus
 
                 if (downloadManager != null)
                 {
@@ -702,6 +703,7 @@ public class ItemViewerFragment extends Fragment
         }
     }
 
+    // Out-of-app viewer if they want it for some reason
     private void openFileExternally()
     {
         if (currentDownloadUrl != null)
