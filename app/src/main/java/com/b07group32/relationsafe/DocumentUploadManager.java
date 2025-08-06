@@ -282,6 +282,7 @@ class DocumentUploadManager {
         }
     }
 
+    // Includes all metadata I could think of
     private void updateItemWithBlobRef(DatabaseReference itemRef, Map<String, String> formData, String blobReference, String originalFileName, String blobId)
     {
         Log.d(TAG, "Updating item with new file metadata");

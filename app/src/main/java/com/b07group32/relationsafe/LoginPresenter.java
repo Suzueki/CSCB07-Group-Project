@@ -82,7 +82,7 @@ public class LoginPresenter implements LoginContract.Presenter {
 
             @Override
             public void onFailure(String error) {
-                view.showToast("Registration failed: " + error);
+                view.showToast("Registration failed.");
             }
         });
     }
@@ -216,7 +216,7 @@ public class LoginPresenter implements LoginContract.Presenter {
 
             @Override
             public void onError(String error) {
-                view.showToast(error);
+                view.showToast("Invalid PIN.");
             }
         });
     }

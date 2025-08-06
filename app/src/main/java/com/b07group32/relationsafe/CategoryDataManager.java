@@ -58,6 +58,7 @@ class CategoryDataManager
         });
     }
 
+    // Add metadata because the requirements stated title, etc. but not other metadata that I'd expect
     public void addSimpleItem(String category, String content, Context context)
     {
         String key = databaseRef.child(category).push().getKey();
@@ -73,6 +74,7 @@ class CategoryDataManager
         }
     }
 
+    // Look for item, if exists, delete, else, serve error msg
     public void deleteItem(String category, String key, FirebaseUser currentUser, Context context, Runnable onSuccess) {
         databaseRef.child(category).child(key).get().addOnSuccessListener(
                 dataSnapshot -> {String fileName = dataSnapshot.child("fileName").getValue(String.class);

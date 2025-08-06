@@ -48,7 +48,7 @@ public class SupportConnectionFragment extends Fragment {
     private LinearLayout supportLinksContainer;
     private TextView cityHeaderText;
 
-    private String userCity = "Toronto"; // Default city
+    private String userCity = "Toronto"; // Default city for fallback
     private HashMap<String, HashMap<String, SupportService[]>> supportDirectory;
 
     // SupportService class to hold service information
@@ -118,7 +118,7 @@ public class SupportConnectionFragment extends Fragment {
                     SupportService[] services = new SupportService[servicesArray.length()];
                     for (int i = 0; i < servicesArray.length(); i++) {
                         JSONObject serviceObj = servicesArray.getJSONObject(i);
-                        services[i] = new SupportService(
+                        services[i] = new SupportService( //The JSON must be formatted the same way every time
                                 serviceObj.getString("name"),
                                 serviceObj.getString("phone"),
                                 serviceObj.getString("description"),
@@ -134,7 +134,7 @@ public class SupportConnectionFragment extends Fragment {
 
         } catch (IOException | JSONException e) {
             Log.e(TAG, "Error loading support directory from JSON", e);
-            // Fallback to default Toronto services if JSON in accessible
+            // Fallback to default Toronto services if JSON doesn't have the city
             createFallbackDirectory();
         }
     }
@@ -164,7 +164,7 @@ public class SupportConnectionFragment extends Fragment {
                     // Look through all plans to find the one with question ID "w2" (city question)
                     for (DataSnapshot planSnapshot : snapshot.getChildren()) {
                         String qid = planSnapshot.child("qid").getValue(String.class);
-                        if ("w2".equals(qid)) { // Based on your Firebase data, "w2" seems to be the city question
+                        if ("w2".equals(qid)) {
                             foundCity = planSnapshot.child("answer").getValue(String.class);
                             break;
                         }
@@ -233,6 +233,7 @@ public class SupportConnectionFragment extends Fragment {
         }
     }
 
+    //This is just UI, no logic is contained here
     private void addServiceItem(SupportService service) {
         if (getContext() == null) return;
 
@@ -314,8 +315,7 @@ public class SupportConnectionFragment extends Fragment {
         supportLinksContainer.addView(serviceLayout);
     }
 
-
-
+    //More UI
     private void displayNoServicesMessage() {
         TextView noServicesText = new TextView(getContext());
         noServicesText.setText("No support services available for your city. Please contact emergency services at 911 if you need immediate help.");

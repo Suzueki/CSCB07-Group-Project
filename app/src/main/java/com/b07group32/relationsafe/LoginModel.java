@@ -35,7 +35,7 @@ public class LoginModel implements LoginContract.Model {
                     } else {
                         String error = task.getException() != null ?
                                 task.getException().getMessage() : "Login failed";
-                        callback.onFailure(error);
+                        callback.onFailure(error); // More specific error reporting
                     }
                 });
     }
@@ -49,7 +49,7 @@ public class LoginModel implements LoginContract.Model {
                     } else {
                         String error = task.getException() != null ?
                                 task.getException().getMessage() : "Registration failed";
-                        callback.onFailure(error);
+                        callback.onFailure(error); // More specific error reporting
                     }
                 });
     }
@@ -132,8 +132,7 @@ public class LoginModel implements LoginContract.Model {
         return (pin.length() == 4 || pin.length() == 6) && TextUtils.isDigitsOnly(pin);
     }
 
-    // Keep this method for backward compatibility but mark as deprecated
-    @Deprecated
+    // We do not use this but I keep it here if I revert
     public boolean verifyPin(String enteredPin) throws GeneralSecurityException, IOException {
         String savedPin = getSavedPin();
         return savedPin != null && savedPin.equals(enteredPin);
